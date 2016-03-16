@@ -5,12 +5,12 @@ var characterSchema = new mongoose.Schema({
   name: String,
   race: String,
   age: Number,
-  presentAt: [{ref: 'Event', type: mongoose.Schema.types.ObjectId}],
-  alive: {type: Boolean, default: true},
+  presentAt: [{ref: 'Event', type: mongoose.Schema.Types.ObjectId}],
+  kia: {type: Boolean, default: false},
   notableItems: [
     {
       name: String, 
-      type: [{type: String}]
+      category: [{type: String}]
     }
   ]
   // diedAt: {ref: 'Event', type: mongoose.Schema.types.ObjectId}

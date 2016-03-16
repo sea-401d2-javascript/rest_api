@@ -1,38 +1,24 @@
 'use strict';
 var mongoose = require('mongoose');
-// var resources = require(__dirname + '/lib/resources.js');
 var express = require('express');
+var bodyParser = require('body-parser');
+var characters = require(__dirname + '/routes/characters.js');
+var events = require(__dirname + '/routes/events.js');
 var app = express();
 
-// app.route('/chars').get((request, response) => {
-//   
-// }).post((request, response) => {
-//   
-// });
-// 
-// app.route('/chars/:id').get((request, response) => {
-//   
-// }).put((request, response) => {
-//   
-// }).delete((request, response) => {
-//   
-// });
-// 
-// app.route('/chars').get((request, response) => {
-//   
-// }).post((request, response) => {
-//   
-// });
-// 
-// app.route('/chars/:id').get((request, response) => {
-//   
-// }).put((request, response) => {
-//   
-// }).delete((request, response) => {
-//   
-// });
 
+let DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
+mongoose.connect(DB_PORT);
 
-app.listen(3000, () => {
-  console.log('server started on 3000');
+var db = mongoose.connection;
+db.on('error', (err) => {
+  console.log('error connecting, error is', err);
+});
+db.once('open', () => {
+  app.use(bodyParser.json());
+  app.use('/characters', characters);
+  app.use('/events', events);
+  app.listen(3000, () => {
+    console.log('server started on 3000');
+  });
 });
