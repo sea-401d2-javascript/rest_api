@@ -1,0 +1,34 @@
+{
+  "name": "rest-api-mongoose",
+  "version": "0.1.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lexm/rest_api.git"
+  },
+  "author": "Lex Myers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lexm/rest_api/issues"
+  },
+  "homepage": "https://github.com/lexm/rest_api#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mongoose": "^4.4.7"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "gulp-mocha": "^2.2.0"
+  }
+}
