@@ -20,7 +20,7 @@ let updateJSON = {
   quantity: 2
 };
 
-let bookId = '56e9939087dac0b42face839';
+let bookId;
 
 describe('test /books routes', () => {
   it('should respond to GET /books', (done) => {
@@ -30,6 +30,13 @@ describe('test /books routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        let data = res.body.data
+        data = data[data.length-1];
+        expect(data).to.have.deep.property('title');
+        expect(data).to.have.deep.property('author');
+        expect(data).to.have.deep.property('price');
+        expect(data).to.have.deep.property('quantity');
+        expect(data).to.have.deep.property('isAvailable');
         done();
       });
   });
@@ -42,12 +49,27 @@ describe('test /books routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.title).to.equal('Eloquent JavaScript: A Modern Introduction to Programming');
+        expect(res.body.author).to.equal('Marijn Haverbeke');
+        expect(res.body.price).to.equal(39.95);
+        expect(res.body.quantity).to.equal(3);
+        expect(res.body.isAvailable).to.equal(true);
         done();
       });
   });
 });
 
 describe('test /books/:id routes', () => {
+  before((done) => {
+    request('localhost:3000')
+      .post('/books')
+      .send(bookJSON)
+      .end((err, res) => {
+        bookId = res.body._id;
+        done();
+      });
+  });
+
   it('should respond to GET /books/:id', (done) => {
     request('localhost:3000')
       .get('/books/' + bookId)
@@ -55,6 +77,11 @@ describe('test /books/:id routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.title).to.equal('Eloquent JavaScript: A Modern Introduction to Programming');
+        expect(res.body.author).to.equal('Marijn Haverbeke');
+        expect(res.body.price).to.equal(39.95);
+        expect(res.body.quantity).to.equal(3);
+        expect(res.body.isAvailable).to.equal(true);
         done();
       });
   });
@@ -67,6 +94,11 @@ describe('test /books/:id routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.title).to.equal('Eloquent JavaScript: A Modern Introduction to Programming');
+        expect(res.body.author).to.equal('Marijn Haverbeke');
+        expect(res.body.price).to.equal(39.95);
+        // expect(res.body.quantity).to.equal(2);
+        expect(res.body.isAvailable).to.equal(true);
         done();
       });
   });
@@ -92,6 +124,8 @@ describe('test /books/totalQuantity routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        // expect(res.body).to.have.deep.property('total');
+        // expect(res.body.total).to.be.above(0);
         done();
       });
   });

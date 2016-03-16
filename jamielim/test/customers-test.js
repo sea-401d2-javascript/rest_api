@@ -19,7 +19,7 @@ let updateJSON = {
   lastName: 'Lim'
 };
 
-let customerId = '56e99a79960e67fa3153e4c0';
+let customerId;
 
 describe('test /customers routes', () => {
   it('should respond to GET /customers', (done) => {
@@ -29,6 +29,12 @@ describe('test /customers routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        let data = res.body.data
+        data = data[data.length-1];
+        expect(data).to.have.deep.property('firstName');
+        expect(data).to.have.deep.property('lastName');
+        expect(data).to.have.deep.property('gender');
+        expect(data).to.have.deep.property('emailAddress');
         done();
       });
   });
@@ -41,12 +47,26 @@ describe('test /customers routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.firstName).to.equal('Jamie');
+        expect(res.body.lastName).to.equal('Wilson');
+        expect(res.body.gender).to.equal('female');
+        expect(res.body.emailAddress).to.equal('jalynnlim@gmail.com');
         done();
       });
   });
 });
 
 describe('test /customers/:id routes', () => {
+  before((done) => {
+    request('localhost:3000')
+      .post('/customers')
+      .send(customerJSON)
+      .end((err, res) => {
+        customerId = res.body._id;
+        done();
+      });
+  });
+
   it('should respond to GET /customers/:id', (done) => {
     request('localhost:3000')
       .get('/customers/' + customerId)
@@ -54,6 +74,10 @@ describe('test /customers/:id routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.firstName).to.equal('Jamie');
+        expect(res.body.lastName).to.equal('Wilson');
+        expect(res.body.gender).to.equal('female');
+        expect(res.body.emailAddress).to.equal('jalynnlim@gmail.com');
         done();
       });
   });
@@ -66,10 +90,13 @@ describe('test /customers/:id routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
+        expect(res.body.firstName).to.equal('Jamie');
+        // expect(res.body.lastName).to.equal('Lim');
+        expect(res.body.gender).to.equal('female');
+        expect(res.body.emailAddress).to.equal('jalynnlim@gmail.com');
         done();
       });
   });
-
 
   it('should respond to DELETE /customers/:id', (done) => {
     request('localhost:3000')
