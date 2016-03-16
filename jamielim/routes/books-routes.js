@@ -20,7 +20,7 @@ module.exports = (apiRouter) => {
 
   apiRouter.route('/books/totalQuantity')
     .get((req, res) => {
-      Book.aggregate([{$group: {_id: 'books', total: {$sum:1}}}], (err, books) => {
+      Book.aggregate([{$group: {_id: 'quantity', total: { $sum: "$quantity" }}}], (err, books) => {
         if (err) {console.error(err);}
         res.json(books);
       });
