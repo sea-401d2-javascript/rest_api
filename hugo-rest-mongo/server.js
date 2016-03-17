@@ -15,7 +15,8 @@ mongoose.connect(DB_PORT);
 let middleRouter = express.Router();
 require('./routes/route-handle')(middleRouter);
 
-app.use('/', middleRouter);
+app.use(bodyParser.json());
+app.use('/', middleRouter); //bodyparser.json()
 app.listen(config.PORT, () => {
   console.log(`listening on port ${config.PORT}`);
 });
