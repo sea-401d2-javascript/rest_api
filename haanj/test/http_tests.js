@@ -13,7 +13,7 @@ let S_PORT = require('../.config').S_PORT;
 // let mongoose = require('mongoose');
 
 describe('/movies resource routing tests', function() {
-  this.timeout(10000); // due to latency with mongodb
+  this.timeout(0); // due to latency with mongodb
 
   it('should send back array of movie objects with GET request', (done) => {
     request('localhost:' + S_PORT)
@@ -23,10 +23,10 @@ describe('/movies resource routing tests', function() {
         expect(res).to.have.status(200);
         expect(typeof res.body).to.eql('object');
         done();
-      });
+      }); 
   });
 
-  
+
 
   // it('should send back name of new file with POST request', (done) => {
   //   request('localhost:3000')
