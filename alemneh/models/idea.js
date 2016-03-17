@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+'use strict';
+let mongoose = require('mongoose');
 
-const ideaSchema = new mongoose.Schema({
+let ideaSchema = new mongoose.Schema({
   sector: String,
   teamSize: {type: Number, default: 2},
   lang: String
