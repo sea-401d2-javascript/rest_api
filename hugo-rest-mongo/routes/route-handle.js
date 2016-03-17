@@ -7,7 +7,7 @@ module.exports = (middleRouter) => {
   .get((req, res) => {
     console.log('GET route hit for /customers');
     Customer.find({}, (err, customers) => {
-      res.json({data: customers})
+      res.json({data: customers});
     });
   })
   .post((req, res) => {
@@ -18,10 +18,10 @@ module.exports = (middleRouter) => {
     });
   });
 
-  middleRouter.route('customers/:id')
+  middleRouter.route('/customers/:id')
   .get((req, res) => {
     console.log('GET route hit for /customers/:id');
-    Customer.findById(req.params.id, (err, res) => {
+    Customer.findById(req.params.id, (err, customer) => {
       res.json(customer); //revise
     });
   })
@@ -35,8 +35,8 @@ module.exports = (middleRouter) => {
   .delete((req, res) => {
     console.log('DEL route hit for /customers/:id');
     Customer.findById(req.params.id, (err, customer) => {
-      customer.remove((err, penguin) => {
-        res.json({message: 'penguin removed'});
+      customer.remove((err, customer) => {
+        res.json({message: 'customer removed'});
       })
     })
   });
@@ -47,36 +47,37 @@ module.exports = (middleRouter) => {
   .get((req, res) => {
     console.log('GET route hit for /products');
     Product.find({}, (err, products) => {
-      res.json({data: products})
+      res.json({data: products});
     });
   })
   .post((req, res) => {
     console.log('POST route hit for /products');
+    var newProduct = new Product(req.body);
     newProduct.save((err, product) => {
       res.json(product);
-    })
+    });
   });
   middleRouter.route('/products/:id')
   .get((req, res) => {
     console.log('GET route hit for /products/:id');
-    PRoduct.findById(req.params.id, (err, product) => {
+    Product.findById(req.params.id, (err, product) => {
       res.json(product);
-    })
+    });
   })
   .put((req, res) => {
     console.log('PUT route hit for /products/:id');
     Product.findByIdAndUpdate(req.params.id, req.body, (err, product) => {
       if (err) return res.send(err);
       res.json(product);
-    })
+    });
   })
   .delete((req, res) => {
     console.log('DEL route hit for /products/:id');
     Product.findById(req.params.id, (err, product) => {
       product.remove((err, product) => {
-        res.json({message: 'penguin removed'});
-      })
-    })
+        res.json({message: 'product removed'});
+      });
+    });
   });
 
   middleRouter.route('/isoceles')
@@ -85,5 +86,5 @@ module.exports = (middleRouter) => {
   })
   .post((req, res) => {
     console.log('POST route hit for /isoceles');
-  })
-}
+  });
+};
