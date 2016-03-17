@@ -1,5 +1,5 @@
 'use strict';
-let Idea = require('../models/Idea');
+let Idea = require('../models/ideas');
 
 module.exports = (ideaRouter) => {
   ideaRouter.route('/ideas')
@@ -32,6 +32,18 @@ module.exports = (ideaRouter) => {
         idea.remove((err, idea) => {
           res.json({message: 'idea removed'});
         });
+      });
+    });
+
+  ideaRouter.route('/ideas/stats')
+    .get((req, res) => {
+      Idea.find({}, (err, idea) => {
+        var totalIdeas = idea.length;
+        var avrgTeamSize = idea.map((idea) => {
+          return idea.teamSize;
+        }).reduce((a,b) => {return (a + b);})/totalIdeas;
+        res.send('Stats\nTotal Ideas: '+totalIdeas+'\nAvg Teamsize: '+
+                  avrgTeamSize);
       });
     });
 
