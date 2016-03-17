@@ -1,21 +1,18 @@
 'use strict';
-// module.exports = (mongoose, models) => {
-//   let arcadeSchema = mongoose.Schema({
-//     name: String,
-//     games:[{type: mongoose.Schema.Types.ObjectId, ref: 'Game'}]
-//   });
-//
-// }
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var ArcadeSchema = new Schema({
+
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+let ArcadeSchema = new Schema({
   name: String,
-  games :[
-    {
+  address: String,
+  updated: {type: Date, default: Date.now },
+  id: Schema.Types.ObjectId,
+  nested: {
+    games: {
       type: Schema.Types.ObjectId,
       ref: 'Games'
     }
-  ]
+  }
 
 });
 

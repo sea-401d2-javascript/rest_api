@@ -38,7 +38,7 @@ router.route('/arcades')
     console.log('get was hit');
     Arcade.find({},(err, arcades)=>{
       if(err) res.send(err);
-      res.json({data: arcades});
+      res.json({arcades});
     });
   });
   //arcade id
@@ -111,6 +111,11 @@ router.route('/games/:id')
              message: 'sucessfully deleted game: ' + game});
          });
        });
+    //non crud
+// router.route('/arcade-games')
+//     .get((req, res)=>{
+//
+//   });
 
 
 app.listen(port);
