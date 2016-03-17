@@ -7,15 +7,14 @@ let ArcadeSchema = new Schema({
   address: String,
   updated: {type: Date, default: Date.now },
   id: Schema.Types.ObjectId,
-  nested: {
-    games: {
-      type: Schema.Types.ObjectId,
-      ref: 'Games'
-    }
+  games: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Games'
   }
+  ]
 
 });
 
 
-var Arcades = mongoose.model('Arcades', ArcadeSchema);
-module.exports = Arcades;
+let Arcade = mongoose.model('Arcade', ArcadeSchema);
+module.exports = Arcade;

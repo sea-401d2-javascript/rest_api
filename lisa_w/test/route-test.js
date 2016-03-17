@@ -8,13 +8,19 @@ var expect = chai.expect;
 require(__dirname + '/../server');
 
 describe('testing REST api routes', () => {
+
+  // after(function(done){
+  //   mongoose.connection
+  // })
   it('POST should post new data to /Arcades', (done)=>{
     request('localhost:3000')
     .post('/api/arcades')
-    .send({})
+    .send({name: 'test name'})
     .end((err, res) =>{
       expect(err).to.eql(null);
       expect(res).to.have.status(200);
+      expect(res.body.name).to.eql('test note');
+      expect(res.body).to.have.property('_id');
       done();
     });
   });
@@ -30,6 +36,16 @@ describe('testing REST api routes', () => {
 
     });
   });
+});
+describe('look for an existing arcade',(done)=>{
+  beforeEach(function(done) {
+    var testArcade = new Arcade({name: 'test arcade'});
+    testArcade.save(function(err, data){
+      if (err) throw err;
+      this.testArcade = data;
+      done();
+    }.bind(this));
+  })
   it('GET should receive the /arcades/:id data', (done)=>{
     request('localhost:3000')
     .get('/api/arcades/:id')
@@ -45,8 +61,10 @@ describe('testing REST api routes', () => {
   });
   // });
   it('PUT should receive the /arcades/:id data', (done)=>{
+    var id = this.
     request('localhost:3000')
-    .get('/api/arcades')
+    .put('/api/arcades/' + id)
+    // .get('/api/arcades')
     .end(function(err, res) {
       request('localhost:3000')
       .put('/api/arcades/' + res.body[0]._id)
@@ -84,5 +102,6 @@ describe('testing REST api routes', () => {
         done();
 
       });
+  });
   });
 });
