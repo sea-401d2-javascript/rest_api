@@ -3,11 +3,14 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var mongoose = require('mongoose');
-var Director = require(__dirname + '/models/director_model');
-var Movie = require(__dirname + '/models/movie_model');
+// var Director = require(__dirname + '/models/director_model');
+// var Movie = require(__dirname + '/models/movie_model');
+var models = require(__dirname + '/models');
+var Director = models.Director;
+var Movie = models.Movie;
 
-var DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
-mongoose.connect(DB_PORT);
+// var DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
+// mongoose.connect(DB_PORT);
 
 
 app.use(bodyParser.json());
