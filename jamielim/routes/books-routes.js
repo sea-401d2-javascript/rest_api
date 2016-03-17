@@ -33,13 +33,13 @@ module.exports = (apiRouter) => {
       });
     })
     .put((req, res) => {
-      Book.findByIdAndUpdate(req.params.id, req.body, (err, book) => {
+      Book.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, book) => {
         if (err) {console.error(err);}
         res.json(book);
       });
     })
     .delete((req, res) => {
-      Book.findOneAndRemove({'_id': req.params.id}, (err, book) => {
+      Book.findByIdAndRemove(req.params.id, (err, book) => {
         if (err) {console.error(err);}
         res.json(book);
       });

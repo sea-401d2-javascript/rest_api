@@ -29,12 +29,16 @@ describe('test /customers routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
-        let data = res.body.data
+        let data = res.body.data;
         data = data[data.length-1];
-        expect(data).to.have.deep.property('firstName');
-        expect(data).to.have.deep.property('lastName');
-        expect(data).to.have.deep.property('gender');
-        expect(data).to.have.deep.property('emailAddress');
+        expect(data).to.have.property('firstName');
+        expect(data.firstName).to.not.equal(null);
+        expect(data).to.have.property('lastName');
+        expect(data.lastName).to.not.equal(null);
+        expect(data).to.have.property('gender');
+        expect(data.gender).to.not.equal(null);
+        expect(data).to.have.property('emailAddress');
+        expect(data.emailAddress).to.not.equal(null);
         done();
       });
   });
@@ -91,7 +95,7 @@ describe('test /customers/:id routes', () => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body.firstName).to.equal('Jamie');
-        // expect(res.body.lastName).to.equal('Lim');
+        expect(res.body.lastName).to.equal('Lim');
         expect(res.body.gender).to.equal('female');
         expect(res.body.emailAddress).to.equal('jalynnlim@gmail.com');
         done();

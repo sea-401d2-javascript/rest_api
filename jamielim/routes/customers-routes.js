@@ -26,13 +26,13 @@ module.exports = (apiRouter) => {
       });
     })
     .put((req, res) => {
-      Customer.findByIdAndUpdate(req.params.id, req.body, (err, customer) => {
+      Customer.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, customer) => {
         if (err) {console.error(err);}
         res.json(customer);
       });
     })
     .delete((req, res) => {
-      Customer.findOneAndRemove({'_id': req.params.id}, (err, customer) => {
+      Customer.findByIdAndRemove(req.params.id, (err, customer) => {
         if (err) {console.error(err);}
         res.json(customer);
       });

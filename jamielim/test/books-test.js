@@ -30,13 +30,18 @@ describe('test /books routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
-        let data = res.body.data
+        let data = res.body.data;
         data = data[data.length-1];
-        expect(data).to.have.deep.property('title');
-        expect(data).to.have.deep.property('author');
-        expect(data).to.have.deep.property('price');
-        expect(data).to.have.deep.property('quantity');
-        expect(data).to.have.deep.property('isAvailable');
+        expect(data).to.have.property('title');
+        expect(data.title).to.not.equal(null);
+        expect(data).to.have.property('author');
+        expect(data.author).to.not.equal(null);
+        expect(data).to.have.property('price');
+        expect(data.price).to.not.equal(null);
+        expect(data).to.have.property('quantity');
+        expect(data.quantity).to.not.equal(null);
+        expect(data).to.have.property('isAvailable');
+        expect(data.isAvailable).to.not.equal(null);
         done();
       });
   });
@@ -97,7 +102,7 @@ describe('test /books/:id routes', () => {
         expect(res.body.title).to.equal('Eloquent JavaScript: A Modern Introduction to Programming');
         expect(res.body.author).to.equal('Marijn Haverbeke');
         expect(res.body.price).to.equal(39.95);
-        // expect(res.body.quantity).to.equal(2);
+        expect(res.body.quantity).to.equal(2);
         expect(res.body.isAvailable).to.equal(true);
         done();
       });
@@ -124,8 +129,8 @@ describe('test /books/totalQuantity routes', () => {
         expect(err).to.equal(null);
         expect(res).to.have.status(200);
         expect(res).to.be.json;
-        // expect(res.body).to.have.deep.property('total');
-        // expect(res.body.total).to.be.above(0);
+        expect(res.body[0]).to.have.deep.property('total');
+        expect(res.body[0].total).to.be.above(0);
         done();
       });
   });
