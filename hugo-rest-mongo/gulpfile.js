@@ -1,15 +1,15 @@
 'use strict';
 
 var gulp = require('gulp');
-var eslint = require('eslint');
-var mocha = require('gulp-mocha');
+var lint = require('eslint');
+var mocha = require('mocha');
 
 var paths = ['*.js', 'models/*.js', 'routes/*.js', 'test/*.js'];
 
-gulp.task('lint', () => {
+gulp.task('eslint', () => {
   gulp.src(paths)
-  .pipe(eslint())
-  .pipe(eslint.format());
+  .pipe(lint())
+  .pipe(lint.format());
 });
 
 gulp.task('test', () => {
@@ -21,4 +21,4 @@ gulp.task('watch', () => {
   gulp.watch(paths);
 });
 
-gulp.task('default', ['eslint', 'test'])
+gulp.task('default', ['eslint', 'test']);

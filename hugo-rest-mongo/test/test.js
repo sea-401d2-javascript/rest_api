@@ -9,7 +9,7 @@ require('../server.js');
 
 describe('testing routes for /customers resource', () => {
   it('should hit a GET route for /customers', (done) => {
-    request('localhost:3000');
+    request('localhost:3000')
     .get('/customers')
     .end((err, res) => {
       expect(err).to.equal(null);
@@ -20,7 +20,7 @@ describe('testing routes for /customers resource', () => {
     });
   });
   it('should hit a POST route for /customers', (done) => {
-    request('localhost:3000');
+    request('localhost:3000')
     .post('/customers')
     .send({"name":"test", "age":"25", "email":"someemail@email.com"})
     .end((err, res) => {
@@ -36,7 +36,7 @@ describe('testing routes for /customers resource', () => {
 
 describe('testing routes for /customers/:id resource', () => {
   it('should hit a GET route for /customers/:id', (done) => {
-    .request('localhost:3000')
+    request('localhost:3000')
     .get('/customers/banana') //revise
     .end((err, res) => {
       expect(err).to.equal(null);
@@ -78,7 +78,7 @@ describe('testing routes for /customers/:id resource', () => {
 
 describe('testing routes for /products resource', () => {
   it('should hit a GET route for /products', (done) => {
-    request('localhost:3000');
+    request('localhost:3000')
     .get('/products')
     .end((err, res) => {
       expect(err).to.equal(null);
@@ -89,7 +89,7 @@ describe('testing routes for /products resource', () => {
     });
   });
   it('should hit a POST route for /products', (done) => {
-    request('localhost:3000');
+    request('localhost:3000')
     .post('/products')
     .send({"name":"test", "age":"25", "email":"someemail@email.com"})
     .end((err, res) => {
@@ -105,7 +105,7 @@ describe('testing routes for /products resource', () => {
 
 describe('testing routes for /products/:id resource', () => {
   it('should hit a GET route for /products/:id', (done) => {
-    .request('localhost:3000')
+    request('localhost:3000')
     .get('/products/banana') //revise
     .end((err, res) => {
       expect(err).to.equal(null);
