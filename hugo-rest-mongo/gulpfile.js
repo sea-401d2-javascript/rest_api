@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
-var lint = require('eslint');
+var lint = require('gulp-eslint');
 var mocha = require('mocha');
 
 var paths = ['*.js', 'models/*.js', 'routes/*.js', 'test/*.js'];
