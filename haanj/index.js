@@ -11,55 +11,6 @@ let Movie = require('./models/movie_module');
 let Snack = require('./models/snack_module');
 mongoose.connect(DB_PORT);
 
-// --------- Populates mongo collections with test data ------- \\
-// (() => {
-//   console.log('Adding documents to collections...');
-//   let populateTest = (index, total) => {
-//     let testSnack = new Snack({
-//       name: 'Nachos v' + Math.random(),
-//       ingredients: [
-//         {name: 'chips'},
-//         {name: 'cheese'}
-//       ],
-//       tags: [
-//         {keyword: 'tasty'},
-//         {keyword: 'cheesy'}
-//       ]
-//     });
-//     let testMovie = new Movie ({
-//       name: 'Nacho Libre v' + Math.random(),
-//       imbd: 9.8,
-//       actors: [
-//         {name: 'Antonio Banderas'},
-//         {name: 'Clint Eastwood'},
-//         {name: 'Jack Black'},
-//         {name: 'Jackie Chan'}
-//       ],
-//       tags: [
-//         {keyword: 'nacho'},
-//         {keyword: 'cheesy'}
-//       ]
-//     });
-//     testSnack.save(()=>{
-//       console.log('Snack added');
-//       testMovie.save(() => {
-//         console.log('Movie added');
-//         if (index == total - 1) {
-//           console.log('Finished uploading');
-//         }
-//       });
-//     });
-//   };
-//
-//   let total = 20;
-//   for (let i = 0; i < total; i++) {
-//     populateTest(i, total);
-//   }
-//
-// })();
-// ------------ END Collection population -------------- \\
-
-
 
 app.use(bodyParser.json());
 
@@ -139,7 +90,35 @@ app.route('/snacks/:id')
     });
   });
 
-// /
+// /suggest roue
+app.route('/suggest')
+  .get((req, res, next) => {
+    console.log('GET request received for /suggest');
+    res.suggestion = {};
+    next();
+  })
+  .get((req, res, next) => {
+    console.log('Getting random movie');
+    Movie.find({}, (err, movies) => {
+      if (err) return res.send(err);
+      let random = Math.floor(Math.random() * movies.length);
+      res.suggestion.movie = movies[random];
+      next();
+    });
+  })
+  .get((req, res, next) => {
+    console.log('Getting random snack');
+    Snack.find({}, (err, snacks) => {
+      if (err) return res.send(err);
+      let random = Math.floor(Math.random() * snacks.length);
+      res.suggestion.snack = snacks[random];
+      next();
+    });
+  })
+  .get((req, res) => {
+    console.log('Returning random movie and random snack');
+    res.json(res.suggestion);
+  });
 
 app.listen(S_PORT, () => {
   console.log('Server started on port', S_PORT);
