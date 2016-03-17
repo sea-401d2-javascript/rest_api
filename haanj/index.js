@@ -9,6 +9,7 @@ let app = express();
 let mongoose = require('mongoose');
 let Movie = require('./models/movie_module');
 let Snack = require('./models/snack_module');
+
 mongoose.connect(DB_PORT);
 
 
@@ -18,10 +19,12 @@ app.use(bodyParser.json());
 app.route('/movies')
   .get((req, res) => {
     console.log('GET request received for /movies');
-    Movie.find({}, (err, movies) => {
-      if (err) return res.send(err);
-      res.json(movies);
-    });
+    Movie.find({})
+      .populate('actors')
+      .exec((err, movies) => {
+        if (err) return res.send(err);
+        res.json(movies);
+      });
   })
   .post((req, res) => {
     console.log('POST request received for /movies');
@@ -34,9 +37,11 @@ app.route('/movies')
 app.route('/movies/:id')
   .get((req, res) => {
     console.log('GET request received for /movies/' + req.params.id);
-    Movie.findById(req.params.id, (err, movie) => {
-      res.json(movie);
-    });
+    Movie.findById(req.params.id)
+      .populate('actors')
+      .exec((err, movie) => {
+        res.json(movie);
+      });
   })
   .put((req, res) => {
     console.log('PUT request received for /movies/' + req.params.id);
@@ -90,7 +95,7 @@ app.route('/snacks/:id')
     });
   });
 
-// /suggest roue
+// /suggest route
 app.route('/suggest')
   .get((req, res, next) => {
     console.log('GET request received for /suggest');
@@ -99,12 +104,14 @@ app.route('/suggest')
   })
   .get((req, res, next) => {
     console.log('Getting random movie');
-    Movie.find({}, (err, movies) => {
-      if (err) return res.send(err);
-      let random = Math.floor(Math.random() * movies.length);
-      res.suggestion.movie = movies[random];
-      next();
-    });
+    Movie.find({})
+      .populate('actors')
+      .exec((err, movies) => {
+        if (err) return res.send(err);
+        let random = Math.floor(Math.random() * movies.length);
+        res.suggestion.movie = movies[random];
+        next();
+      });
   })
   .get((req, res, next) => {
     console.log('Getting random snack');
