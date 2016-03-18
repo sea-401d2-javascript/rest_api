@@ -3,11 +3,12 @@ var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var eslint = require('gulp-eslint');
 
-var files = ['gulpfile.js', 'index.js', __dirname + '/lib/**/*.js', __dirname + '/test/**/*.js'];
+var files = ['gulpfile.js', 'server.js', __dirname + '/lib/**/*.js', __dirname + '/test/**/*.js',
+            __dirname + '/models/**/*.js', __dirname + '/routes/**/*.js'];
 
 //Run mocha for tests
 gulp.task('mocha', function() {
-  return gulp.src(__dirname +'/test/router_test.js', {read: false})
+  return gulp.src(__dirname +'/test/rest_test.js', {read: false})
              .pipe(mocha( {reporter: 'nyan'}));
 });
 

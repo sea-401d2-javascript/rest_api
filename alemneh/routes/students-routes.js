@@ -1,7 +1,8 @@
 'use strict';
-let Student = require('../models/students');
 
-module.exports = (studentsRouter) => {
+module.exports = (studentsRouter, db) => {
+  let Student = db.Student;
+
   studentsRouter.route('/students')
     .get((req, res) => {
       Student.find({}, (err, student) =>{

@@ -1,7 +1,8 @@
 'use strict';
-let Idea = require('../models/ideas');
 
-module.exports = (ideaRouter) => {
+module.exports = (ideaRouter, db) => {
+  let Idea = db.Idea;
+
   ideaRouter.route('/ideas')
     .get((req, res) => {
       Idea.find({}, (err, idea) =>{
@@ -26,6 +27,7 @@ module.exports = (ideaRouter) => {
       Idea.findByIdAndUpdate(req.params.id, req.body, (err, idea) =>{
         if(err) return res.send(err);
         res.json(idea);
+        console.log(idea);
       });
     }).delete((req, res) => {
       Idea.findById(req.params.id, (err, idea) =>{
@@ -35,17 +37,6 @@ module.exports = (ideaRouter) => {
       });
     });
 
-  ideaRouter.route('/ideas/stats')
-    .get((req, res) => {
-      Idea.find({}, (err, idea) => {
-        var totalIdeas = idea.length;
-        var avrgTeamSize = idea.map((idea) => {
-          return idea.teamSize;
-        }).reduce((a,b) => {return (a + b);})/totalIdeas;
-        res.send('Stats\nTotal Ideas: '+totalIdeas+'\nAvg Teamsize: '+
-                  avrgTeamSize);
-      });
-    });
 
 
 };
