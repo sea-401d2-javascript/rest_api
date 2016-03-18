@@ -87,12 +87,12 @@ app.delete('/drinks/:id', (req, res) => {
     });
   });
 });
-// app.get('/drinks/:alcohol', (req, res) => {
-//   Drinks.count({'alcohol':{$in:[req.params]}}, (err, drinks)=> {
-//     res.json({message: 'There are %d drinks'}, drinks);
-//     console.log('There is %d gin drinks', drinks);
-//   });
-// });
+app.get('/search/', (req, res) => {
+  var alcohol = JSON.parse(req.query.alcohol);
+  Drinks.find({'alcohol': alcohol}, (err, drinks)=> {
+    res.json(drinks);
+  });
+});
 
 
 app.listen(3000, () => {

@@ -7,10 +7,10 @@ chai.use(chaiHttp);
 var expect = chai.expect;
 // var request = chai.request;
 
-var Beers = require('../models/beer_model.js');
-var Drinks = require('../models/drink_model.js');
+var Beers = require(__dirname + '/../models/beer_model.js');
+var Drinks = require(__dirname + '/../models/drink_model.js');
 
-process.env.MONGOLAB_URI = 'mongodb://localhost/db';
+process.env.MONGOLAB_URI = 'mongodb://localhost/testdb';
 
 require(__dirname + '/../server');
 
@@ -96,10 +96,10 @@ describe('Drinks REST api', function() {
   it('should be able to create a new drink', function(done) {
     chai.request('localhost:3000')
       .post('/drinks')
-      .send({name: 'Tequila Sunrise'})
+      .send({name: 'Lemon Drop'})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.name).to.eql('Tequila Sunrise');
+        expect(res.body.name).to.eql('Lemon Drop');
         expect(res.body).to.have.property('name');
         done();
       });
@@ -117,7 +117,7 @@ describe('Drinks REST api', function() {
 
   describe('needs a drink to work with', function() {
     beforeEach(function(done) {
-      var testDrink = new Drinks({name: 'test drink'});
+      var testDrink = new Drinks({name: 'test drink', alcohol:['gin']});
       testDrink.save(function(err, data) {
         if(err) throw err;
         this.testDrink = data;
@@ -128,6 +128,17 @@ describe('Drinks REST api', function() {
     it('should be able to make a drink in a beforeEach block', function() {
       expect(this.testDrink.name).to.eql('test drink');
       expect(this.testDrink).to.have.property('name');
+      expect(this.testDrink).to.have.property('alcohol');
+    });
+
+    it('should get all drinks made with a user chosen alcohol', function(done) {
+      chai.request('localhost:3000')
+      .get('/search/?alcohol="gin"')
+      .end(function(err, res) {
+        expect(err).to.eql(null);
+        expect(typeof res.body).to.eql('object');
+        done();
+      });
     });
 
     it('should update a drink record', function(done) {
