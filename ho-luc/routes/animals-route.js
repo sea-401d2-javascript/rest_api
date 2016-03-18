@@ -60,23 +60,26 @@ module.exports = (apiRouter) => {
     })
 
     apiRouter.route('/mostPopularAnimalFood')
-    .get((req, res) => {
-      var foodArray = [];
-      Animal.find({}, (err, animal) => {
-        animal.forEach((animal) => {
-          foodArray.push(animal.favoriteFood);
-        })
-        //gets the most popular food with the count
-        var count = {};
-        var mostFood;
-        for(var i = 0; i < foodArray.length; i++) {
-          count[foodArray[i]] = count[foodArray[i]] + 1 || 1;
-          if(count[foodArray[i]] > (count[mostFood] || 0)) {
-            mostFood = foodArray[i];
+      .get((req, res) => {
+        var foodArray = [];
+        Animal.find({}, (err, animal) => {
+          animal.forEach((animal) => {
+            foodArray.push(animal.favoriteFood);
+          })
+          //gets the most popular food with the count
+          var count = {};
+          var mostFood;
+          for(var i = 0; i < foodArray.length; i++) {
+            count[foodArray[i]] = count[foodArray[i]] + 1 || 1;
+            if(count[foodArray[i]] > (count[mostFood] || 0)) {
+              mostFood = foodArray[i];
+            }
           }
-        }
-        res.json({message: 'The most popular food for anmails is, \'' + mostFood + '\' with ' + count[mostFood] + ' tallies'});
-        return res.end();
-      })
+          res.json({
+            status: 200,
+            message: 'The most popular food for animals is, \'' + mostFood + '\' with ' + count[mostFood] + ' tallies'
+          })
+          res.end();
+        })
     })
 }
