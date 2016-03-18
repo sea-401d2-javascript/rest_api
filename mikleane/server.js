@@ -44,15 +44,6 @@ app.delete('/beers/:id', (req, res) => {
     });
   });
 });
-// app.get('/beers/:brewery', (req, res) => {
-//   var query = Beers.findOne({'brewery': 'Black Raven Brewing Company'});
-//   query.select('brewery name');
-//   query.exec(function(err, brewery) {
-//     if(err) return handleError(err);
-//     res.json({brewery})
-//     console.log('%s has %s', brewery.brewery, brewery.name);
-//   });
-// });
 
 app.get('/drinks', (req, res) => {
   Drinks.find({}, (err, drinks) => {
