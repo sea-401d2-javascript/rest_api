@@ -51,7 +51,7 @@ describe('need to have existing director to test with', function(done) {
 
 
     beforeEach(function(done) {
-      var testDirector = new Director({"name": "Alejandro González Iñárritu", "date_of_birth": "August 15, 1963"});
+      var testDirector = new Director({"name": "Alejandro González Iñárritu", "date_of_birth": "August 15, 1962"});
       testDirector.save(function(err, data) {
         if(err) throw err;
         this.testDirector = data;
@@ -61,16 +61,26 @@ describe('need to have existing director to test with', function(done) {
 
     it('should have created director in forEach block', function(done) {
       expect(this.testDirector.name).to.eql('Alejandro González Iñárritu');
-      expect(Date(this.testDirector.date_of_birth)).to.eql(Date('August 15, 1963'));
+      expect(Date(this.testDirector.date_of_birth)).to.eql(Date('August 15, 1962'));
       expect(this.testDirector).to.have.property('_id');
       done();
     });
 
 
   it('should be able to update director', function(done) {
-    done();
+    var id = this.testDirector._id;
+    request('localhost:3000')
+    .put('/directors/' + id)
+    .send({"name": "Alejandro González Iñárritu", "date_of_birth": "August 15, 1963"})
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.name).to.eql('Alejandro González Iñárritu');
+      expect(Date(res.body.date_of_birth)).to.eql(Date('August 15, 1963'));
+      done();
+    })
   })
   it('should be able to delete director', function(done) {
+    expect('not implemented').to.eql(false);
     done();
   })
 });
