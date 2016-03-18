@@ -17,14 +17,12 @@ app.get('/movies', (req, res) => {
 
 app.get('/movies/size', (req, res) => {
   Movie.find({}, (err, movies) => {
-    console.log(movies);
     res.write(movies.length.toString());
     res.end();
   });
 });
 
 app.get('/movies/:id', (req, res) => {
-  console.log(req.params.id);
   Movie.findById(req.params.id, (err, movie) => {
     res.json(movie);
   });
@@ -61,7 +59,6 @@ app.get('/directors', (req, res) => {
 
 app.get('/directors/size', (req, res) => {
   Director.find({}, (err, directors) => {
-    console.log(directors);
     res.write(directors.length.toString());
     res.end();
   });

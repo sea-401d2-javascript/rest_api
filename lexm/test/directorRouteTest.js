@@ -44,6 +44,17 @@ describe('testing Director API', function() {
       done();
     });
   });
+
+  it('should be able to fetch number of directors', function(done) {
+    request('localhost:3000')
+    .get('/directors/size')
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.text).to.eql('1');
+      done();
+    });
+  });
+
 });
 
 describe('need to have existing director to test with', function() {
