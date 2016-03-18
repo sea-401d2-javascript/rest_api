@@ -45,7 +45,7 @@ app.put('/movies/:id', (req, res) => {
 
 app.delete('/movies/:id', (req, res) => {
   Movie.findById(req.params.id, (err, movie) => {
-    movie.remove((err, movie) => {
+    movie.remove(() => {
       res.json({message: 'movie removed'});
     });
   });
@@ -86,7 +86,7 @@ app.put('/directors/:id', (req, res) => {
 
 app.delete('/directors/:id', (req, res) => {
   Director.findById(req.params.id, (err, director) => {
-    director.remove((err, director) => {
+    director.remove(() => {
       res.json({message: 'director removed'});
     });
   });
