@@ -1,5 +1,5 @@
 'use strict';
-let S_PORT = process.env.S_PORT || require('./.config').S_PORT;
+let S_PORT = Number(process.env.S_PORT) || require('./.config').S_PORT;
 let DB_PORT = process.env.DB_PORT || require('./.config').DB_PORT;
 
 let bodyParser = require('body-parser');

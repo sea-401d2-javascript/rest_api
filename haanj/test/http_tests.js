@@ -9,7 +9,7 @@ let request = chai.request;
 let expect = chai.expect;
 
 // let DB_PORT = require('../.config').DB_PORT;
-let S_PORT = process.env.S_PORT || require('../.config').S_PORT;
+let S_PORT = Number(process.env.S_PORT) || require('../.config').S_PORT;
 // let mongoose = require('mongoose');
 let newMovie = {name: 'Paul Blart', imdb: 9.9};
 let newSnack = {name: 'pho', ingredients: ['beef', 'magic']};
