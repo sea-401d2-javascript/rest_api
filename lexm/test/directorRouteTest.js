@@ -75,6 +75,18 @@ describe('need to have existing director to test with', function() {
     done();
   });
 
+  it('should be able to look up individual director entry', function(done) {
+    var id = this.testDirector._id;
+    request('localhost:3000')
+    .get('/directors/' + id)
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.name).to.eql('Alejandro González Iñárritu');
+      expect(Date(res.body.date_of_birth)).to.eql(Date('August 15, 1962'));
+      done();
+    });
+  });
+
   it('should be able to update director', function(done) {
     var id = this.testDirector._id;
     request('localhost:3000')

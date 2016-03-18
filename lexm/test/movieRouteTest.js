@@ -77,6 +77,18 @@ describe('need to have existing movie to test with', function() {
     done();
   });
 
+  it('should be able to look up individual movie entry', function(done) {
+    var id = this.testMovie._id;
+    request('localhost:3000')
+    .get('/movies/' + id)
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.name).to.eql('Traffic');
+      expect(Date(res.body.release_date)).to.eql(Date('December 27, 2000'));
+      done();
+    });
+  });
+
   it('should be able to update movie', function(done) {
     var id = this.testMovie._id;
     request('localhost:3000')
