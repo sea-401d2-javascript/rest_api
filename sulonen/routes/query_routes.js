@@ -10,11 +10,10 @@ router.use(parser.json());
 
 router.route('/bar/')
   .get((req, res) => {
-    console.log(req);
-    //let name = JSON.parse(req.query.name);
-    // Bar.find({'name':name}, (err, bar) => {
-    //   res.write(bar.name + 'is open from' + bar.hours);
-    // });
+    let barName = JSON.parse(req.query.name);
+    Bar.find({'name':barName}, (err, bar) => {
+      res.send(bar[0].name + ' is open ' + bar[0].hours);
+    });
   });
 
 module.exports = router;
