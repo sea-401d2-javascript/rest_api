@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 var lint = require('gulp-eslint');
-var mocha = require('mocha');
+var mocha = require('gulp-mocha');
 
 var paths = ['*.js', 'models/*.js', 'routes/*.js', 'test/*.js'];
 

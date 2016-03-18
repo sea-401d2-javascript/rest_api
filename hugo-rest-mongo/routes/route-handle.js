@@ -6,7 +6,7 @@ module.exports = (middleRouter) => {
   middleRouter.route('/customers')
   .get((req, res) => {
     console.log('GET route hit for /customers');
-    Customer.find({}, (err, customers) => {
+    Customer.find({}).populate('products').exec((err, customers) => {
       res.json({data: customers});
     });
   })
@@ -83,21 +83,15 @@ module.exports = (middleRouter) => {
   middleRouter.route('/stock-count')
   .get((req, res) => {
     console.log('GET route hit for /stock-count');
-  //   Product.count({}, (err, count) => {
-  //     res.json({count});
-  // });
     Product.aggregate([
       {$group: {_id: '$id', stockAvg: { $avg: '$stock'}}}
     ], (err, results) => {
       if (err) {
         console.error(err);
       } else {
-        res.json({results});
+        var avg = Math.round(results[0].stockAvg).toFixed(2);
+        res.send('the average stock count for all products is ' + avg);
       }
     });
-    // });
   });
-  // .post((req, res) => {
-  //   console.log('POST route hit for /isoceles');
-  // });
 };
