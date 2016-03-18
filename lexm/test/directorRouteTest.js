@@ -24,14 +24,14 @@ describe('testing Director API', function() {
   it('should be able to add a new director', function(done) {
     request('localhost:3000')
     .post('/directors')
-    .send({"name": "Steven Soderbergh", "date_of_birth": "January 14, 1963"})
+    .send({'name': 'Steven Soderbergh', 'date_of_birth': 'January 14, 1963'})
     .end(function(err, res) {
       expect(err).to.eql(null);
       expect(res.body.name).to.eql('Steven Soderbergh');
       expect(Date(res.body.date_of_birth)).to.eql(Date('January 14, 1963'));
       expect(res.body).to.have.property('_id');
       done();
-    })
+    });
   });
 
   it('should be able to retrieve list of directors', function(done) {
@@ -44,55 +44,47 @@ describe('testing Director API', function() {
       done();
     });
   });
-
 });
 
-describe('need to have existing director to test with', function(done) {
+describe('need to have existing director to test with', function() {
 
-
-    beforeEach(function(done) {
-      var testDirector = new Director({"name": "Alejandro González Iñárritu", "date_of_birth": "August 15, 1962"});
-      testDirector.save(function(err, data) {
-        if(err) throw err;
-        this.testDirector = data;
-        done();
-      }.bind(this));
-    });
-
-    it('should have created director in forEach block', function(done) {
-      expect(this.testDirector.name).to.eql('Alejandro González Iñárritu');
-      expect(Date(this.testDirector.date_of_birth)).to.eql(Date('August 15, 1962'));
-      expect(this.testDirector).to.have.property('_id');
+  beforeEach(function(done) {
+    var testDirector = new Director({'name': 'Alejandro González Iñárritu', 'date_of_birth': 'August 15, 1962'});
+    testDirector.save(function(err, data) {
+      if(err) throw err;
+      this.testDirector = data;
       done();
-    });
+    }.bind(this));
+  });
 
+  it('should have created director in forEach block', function(done) {
+    expect(this.testDirector.name).to.eql('Alejandro González Iñárritu');
+    expect(Date(this.testDirector.date_of_birth)).to.eql(Date('August 15, 1962'));
+    expect(this.testDirector).to.have.property('_id');
+    done();
+  });
 
   it('should be able to update director', function(done) {
     var id = this.testDirector._id;
     request('localhost:3000')
     .put('/directors/' + id)
-    .send({"name": "Alejandro González Iñárritu", "date_of_birth": "August 15, 1963"})
+    .send({'name': 'Alejandro González Iñárritu', 'date_of_birth': 'August 15, 1963'})
     .end(function(err, res) {
       expect(err).to.eql(null);
       expect(res.body.name).to.eql('Alejandro González Iñárritu');
       expect(Date(res.body.date_of_birth)).to.eql(Date('August 15, 1963'));
       done();
-    })
-  })
-  it('should be able to delete director', function(done) {
-    expect('not implemented').to.eql(false);
-    done();
-  })
-});
+    });
+  });
 
-// describe('testing /directors:id GET route', function(done) {
-//
-// });
-//
-// describe('testing /directors:id PUT route', function(done) {
-//
-// });
-//
-// describe('testing /directors:id DELETE route', function(done) {
-//
-// });
+  it('should be able to delete director', function(done) {
+    var id = this.testDirector._id;
+    request('localhost:3000')
+    .del('/directors/' + id)
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.message).to.eql('director removed');
+      done();
+    });
+  });
+});

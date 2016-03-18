@@ -2,15 +2,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-var mongoose = require('mongoose');
-// var Director = require(__dirname + '/models/director_model');
-// var Movie = require(__dirname + '/models/movie_model');
 var models = require(__dirname + '/models');
 var Director = models.Director;
 var Movie = models.Movie;
-
-// var DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
-// mongoose.connect(DB_PORT);
 
 
 app.use(bodyParser.json());
@@ -26,10 +20,8 @@ app.get('/movies/size', (req, res) => {
     console.log(movies);
     res.write(movies.length.toString());
     res.end();
-  })
-})
-
-// app.get('')
+  });
+});
 
 app.get('/movies/:id', (req, res) => {
   console.log(req.params.id);
@@ -72,8 +64,8 @@ app.get('/directors/size', (req, res) => {
     console.log(directors);
     res.write(directors.length.toString());
     res.end();
-  })
-})
+  });
+});
 
 app.get('/directors/:id', (req, res) => {
   Director.findById(req.params.id, (err, director) => {
@@ -104,5 +96,5 @@ app.delete('/directors/:id', (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('server started')
-})
+  console.log('server started');
+});

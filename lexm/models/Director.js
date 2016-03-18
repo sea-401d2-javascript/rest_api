@@ -1,4 +1,3 @@
-// var mongoose = require('mongoose');
 module.exports = (mongoose, models) => {
   var directorSchema = new mongoose.Schema({
     name: String,
