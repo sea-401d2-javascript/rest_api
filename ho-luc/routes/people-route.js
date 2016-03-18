@@ -4,7 +4,7 @@ let People = require(__dirname + '/../models/people_model');
 module.exports = (apiRouter) => {
   apiRouter.route('/people')
     .get((req, res) => {
-      People.find({}, (err, people) => {
+      People.find({}).populate('pets').exec((err, people) => {
         res.json({
           status: 200,
           data: people

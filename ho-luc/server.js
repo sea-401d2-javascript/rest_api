@@ -4,7 +4,6 @@ let express = require('express');
 let app = express();
 let apiRouter = express.Router();
 let mongoose = require('mongoose');
-// let config = require('./config/environment');
 let bodyParser = require('body-parser');
 require('./routes/animals-route')(apiRouter);
 require('./routes/people-route')(apiRouter);
