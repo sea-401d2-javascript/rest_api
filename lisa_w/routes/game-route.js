@@ -1,5 +1,5 @@
 'use strict';
-var Game = require('../models/games');
+var Game = require('../models/Game');
 var bodyParser = require('body-parser');
 
 module.exports = (router) => {
@@ -21,7 +21,7 @@ module.exports = (router) => {
            res.json(games);
          });
        });
-    
+
   router.route('/games/:id')
        .get((req, res)=>{
          console.log(('GET /games/:id was hit'));

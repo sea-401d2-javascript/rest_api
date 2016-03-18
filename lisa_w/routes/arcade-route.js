@@ -1,5 +1,5 @@
 'use strict';
-var Arcade = require('../models/arcades.js');
+var Arcade = require('../models/Arcade');
 var bodyParser = require('body-parser');
 
 module.exports = function(router){
@@ -39,19 +39,16 @@ module.exports = function(router){
        res.json(arcade);
      });
    })
-     .delete((req, res)=>{
-       Arcade.findById(req.params.id, (err, arcade)=>{
-         arcade.remove((err, arcades)=>{
-           res.json({message: 'sucessfully deleted arcade'});
-         });
-       });
-    //    console.log('deleted');
-    //    Arcade.remove({id: req.params.id},function(err, arcade) {
-    //      if(err) res.send(err);
-    //      res.json({
-    //        message: 'sucessfully deleted arcade'});
-    //    });
-     });
+    .delete((req, res)=> {
+      Arcade.remove({_id: req.params.id}, (err, arcade)=> {
+        if(err) return res.send(err);
+        res.json({
+          data: arcade,
+          msg: 'sucessfully deleted arcade'});
+      });
+    });
+
+
   router.route('/arcade-names')
     .get((req, res)=>{
       var nameArray = [];
