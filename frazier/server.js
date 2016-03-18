@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var charactersRouter = require(__dirname + '/routes/characters.js');
 var eventsRouter = require(__dirname + '/routes/events.js');
+var statsRouter = require(__dirname + '/routes/stats.js');
 var app = express();
 
 
@@ -16,6 +17,7 @@ db.on('error', (err) => {
 });
 db.once('open', () => {
   app.use(bodyParser.json());
+  app.use('/stats', statsRouter);
   app.use('/characters', charactersRouter);
   app.use('/events', eventsRouter);
   app.listen(3000, () => {

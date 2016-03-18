@@ -1,6 +1,7 @@
 'use strict';
 var express = require('express');
 // var mongoose = require('mongoose');
+var Event = require(__dirname + '/../models/events-model.js');
 var Character = require(__dirname + '/../models/characters-model.js');
 // var resources = require(__dirname + '/../lib/resources.js');
 
@@ -8,7 +9,8 @@ var router = express.Router();
 
 router.get('/', (request, response) => {
   console.log('GET request to /characters made');
-  Character.find({}, (err, characters) => {
+  Character.find({}).populate('presentAt', 'name')
+  .exec( (err, characters) => {
     if (err){
       // response.writeHead(404, {'Content-Type: application/json'});
       return response.status(404).end('404 Not found');
@@ -22,7 +24,7 @@ router.get('/', (request, response) => {
 router.post('/', (request, response) => {
   console.log('post to /characters made');
   console.log('req body is', request.body);
-  if(request.body.name && request.body.age){
+  if(request.body.name){
     var newCharacter = new Character(request.body);
     newCharacter.save((err, newDBCharacter) => {
       if(err){
@@ -31,6 +33,12 @@ router.post('/', (request, response) => {
       } else{
         console.log(newDBCharacter.name + ' saved.');
         response.status(200).json(newDBCharacter);
+        if (newDBCharacter.presentAt.length > 0){
+          console.log('Need to add characters references to events');
+          request.body.presentAt.forEach((currentEventId) => {
+            Event.findOne({_id: currentEventId}).update({$push: {'charsPresent': newDBCharacter._id}});
+          });
+        }
       }
     });
   } else {
@@ -40,7 +48,8 @@ router.post('/', (request, response) => {
 
 router.get('/:id', (request, response) => {
   console.log('GET request to /characters/:id made');
-  Character.findOne({_id: request.params.id}, (err, character) => {
+  Character.find({_id: request.params.id}).populate('presentAt', 'name')
+  .exec((err, character) => {
     if (err){
       console.log('Error finding requested character, error was ', err);
       response.status(400).end();
