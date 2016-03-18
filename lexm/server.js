@@ -21,11 +21,23 @@ app.get('/movies', (req, res) => {
   });
 });
 
+app.get('/movies/size', (req, res) => {
+  Movie.find({}, (err, movies) => {
+    console.log(movies);
+    res.write(movies.length.toString());
+    res.end();
+  })
+})
+
+// app.get('')
+
 app.get('/movies/:id', (req, res) => {
+  console.log(req.params.id);
   Movie.findById(req.params.id, (err, movie) => {
     res.json(movie);
   });
 });
+
 
 app.post('/movies', (req, res) => {
   var newMovie = new Movie(req.body);
@@ -54,6 +66,14 @@ app.get('/directors', (req, res) => {
     res.json({data: directors});
   });
 });
+
+app.get('/directors/size', (req, res) => {
+  Director.find({}, (err, directors) => {
+    console.log(directors);
+    res.write(directors.length.toString());
+    res.end();
+  })
+})
 
 app.get('/directors/:id', (req, res) => {
   Director.findById(req.params.id, (err, director) => {
