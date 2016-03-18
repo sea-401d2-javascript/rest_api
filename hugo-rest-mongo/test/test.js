@@ -30,7 +30,6 @@ describe('testing routes for /customers resource', () => {
       expect(res).to.have.status(200);
       expect(res).to.be.a('object');
       expect(res.body).to.have.property('email');
-      // expect(res.body).to.have.property('SUCCESS');
       done();
     });
   });
@@ -43,22 +42,20 @@ describe('testing routes for /customers/:id resource', () => {
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res).to.have.status(200);
-      expect(res.text).to.include('name'); //revise
-      // expect(res.body).to.have.property('SUCCESS');
+      expect(res.text).to.include('name');
       done();
     });
   });
   it('should hit a PUT route for /customers/:id', (done) => {
     request('localhost:3000')
-    .put('customers/56ead7f050679f3254d0113d') //revise
-    .send({"name":"testname", "age":"25", "email":"someemail@email.com"}) //revise
+    .put('/customers/56ead7f050679f3254d0113d')
+    .send({"name":"testname", "age":"25", "email":"someemail@email.com"})
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res).to.have.status(200);
       expect(res).to.be.json;
-      expect(res.body).to.have.property('UPDATED');
-      expect(res.body).to.have.property('name');
-      expect(res.body).to.have.property('email');
+      expect(res.text).to.include('name');
+      expect(res.text).to.include('value');
       done();
     });
   });
@@ -101,7 +98,6 @@ describe('testing routes for /products/:id resource', () => {
       expect(err).to.equal(null);
       expect(res).to.have.status(200);
       expect(res.text).to.include('apple');
-      // expect(res.body).to.have.property('SUCCESS');
       done();
     });
   });
@@ -128,7 +124,6 @@ describe('testing PUT/DELETE routes for /customers', () => {
     .send({name: 'Not Gordon', age: '62', email: 'adifferentemail@em.com'})
     .end((err, res) => {
       expect(err).to.eql(null);
-      // expect(res.body.msg).to.eql('success');
       done();
     });
   });
@@ -137,7 +132,6 @@ describe('testing PUT/DELETE routes for /customers', () => {
     .del('/customers/' + this.testCustomer._id)
     .end((err, res) => {
       expect(err).to.eql(null);
-      // expect(res.body.msg).to.eql('success');
       done();
     });
   });
@@ -166,7 +160,6 @@ describe('testing PUT/DELETE routes for /products/:id', () => {
     .send({name: 'Not Banana', upc: '62dfads34234', category: 'Produce', stock: '24'})
     .end((err, res) => {
       expect(err).to.eql(null);
-      // expect(res.body.msg).to.eql('success');
       done();
     });
   });
@@ -175,7 +168,6 @@ describe('testing PUT/DELETE routes for /products/:id', () => {
     .del('/products/' + this.testProduct._id)
     .end((err, res) => {
       expect(err).to.eql(null);
-      // expect(res.body.msg).to.eql('success');
       done();
     });
   });
