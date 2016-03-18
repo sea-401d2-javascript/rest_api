@@ -35,6 +35,7 @@ describe('testing Movie API', function() {
       expect(res.body).to.have.property('_id');
       done();
     });
+
   });
 
   it('should be able to retrieve list of movies', function(done) {
@@ -48,6 +49,15 @@ describe('testing Movie API', function() {
     });
   });
 
+  it('should be able to fetch number of movies', function(done) {
+    request('localhost:3000')
+    .get('/movies/size')
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.text).to.eql('1');
+      done();
+    });
+  });
 });
 
 describe('need to have existing movie to test with', function() {
@@ -67,6 +77,18 @@ describe('need to have existing movie to test with', function() {
     done();
   });
 
+  it('should be able to look up individual movie entry', function(done) {
+    var id = this.testMovie._id;
+    request('localhost:3000')
+    .get('/movies/' + id)
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(res.body.name).to.eql('Traffic');
+      expect(Date(res.body.release_date)).to.eql(Date('December 27, 2000'));
+      done();
+    });
+  });
+
   it('should be able to update movie', function(done) {
     var id = this.testMovie._id;
     request('localhost:3000')
@@ -79,7 +101,6 @@ describe('need to have existing movie to test with', function() {
       done();
     });
   });
-  
   it('should be able to delete movie', function(done) {
     var id = this.testMovie._id;
     request('localhost:3000')

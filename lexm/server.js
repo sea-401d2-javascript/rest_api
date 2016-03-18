@@ -17,14 +17,12 @@ app.get('/movies', (req, res) => {
 
 app.get('/movies/size', (req, res) => {
   Movie.find({}, (err, movies) => {
-    console.log(movies);
     res.write(movies.length.toString());
     res.end();
   });
 });
 
 app.get('/movies/:id', (req, res) => {
-  console.log(req.params.id);
   Movie.findById(req.params.id, (err, movie) => {
     res.json(movie);
   });
@@ -47,7 +45,7 @@ app.put('/movies/:id', (req, res) => {
 
 app.delete('/movies/:id', (req, res) => {
   Movie.findById(req.params.id, (err, movie) => {
-    movie.remove((err, movie) => {
+    movie.remove(() => {
       res.json({message: 'movie removed'});
     });
   });
@@ -61,7 +59,6 @@ app.get('/directors', (req, res) => {
 
 app.get('/directors/size', (req, res) => {
   Director.find({}, (err, directors) => {
-    console.log(directors);
     res.write(directors.length.toString());
     res.end();
   });
@@ -89,7 +86,7 @@ app.put('/directors/:id', (req, res) => {
 
 app.delete('/directors/:id', (req, res) => {
   Director.findById(req.params.id, (err, director) => {
-    director.remove((err, director) => {
+    director.remove(() => {
       res.json({message: 'director removed'});
     });
   });
