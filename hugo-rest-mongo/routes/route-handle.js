@@ -80,11 +80,24 @@ module.exports = (middleRouter) => {
     });
   });
 
-  middleRouter.route('/isoceles')
+  middleRouter.route('/stock-count')
   .get((req, res) => {
-    console.log('GET route hit for /isoceles');
-  })
-  .post((req, res) => {
-    console.log('POST route hit for /isoceles');
+    console.log('GET route hit for /stock-count');
+  //   Product.count({}, (err, count) => {
+  //     res.json({count});
+  // });
+    Product.aggregate([
+      {$group: {_id: '$id', stockAvg: { $avg: '$stock'}}}
+    ], (err, results) => {
+      if (err) {
+        console.error(err);
+      } else {
+        res.json({results});
+      }
+    });
+    // });
   });
+  // .post((req, res) => {
+  //   console.log('POST route hit for /isoceles');
+  // });
 };

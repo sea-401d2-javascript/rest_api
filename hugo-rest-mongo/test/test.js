@@ -6,6 +6,8 @@ var expect = chai.expect;
 var request = chai.request;
 var http = require('http');
 require('../server.js');
+var Customer = require('../models/customers-model');
+var Product = require('../models/products-model');
 
 describe('testing routes for /customers resource', () => {
   it('should hit a GET route for /customers', (done) => {
@@ -60,19 +62,6 @@ describe('testing routes for /customers/:id resource', () => {
       done();
     });
   });
-  // it('should hit a DEL route for /customers/:id', (done) => {
-  //   request('localhost:3000')
-  //   .get('/customers/banana') //revise
-  //   .delete('/customers/banana') //revise
-  //   .end((err, res) => {
-  //     expect(err).to.be(null);
-  //     expect(res).to.have.status(200);
-  //     expect(res).to.be.json;
-  //     expect(res.body).to.have.property('REMOVED');
-  //     expect(res.body.REMOVED).to.have.property('name');
-  //     done();
-  //   });
-  // });
 });
 
 //product route testing
@@ -116,31 +105,78 @@ describe('testing routes for /products/:id resource', () => {
       done();
     });
   });
-  it('should hit a PUT route for /products/:id', (done) => {
+});
+
+describe('testing PUT/DELETE routes for /customers', () => {
+  before((done) => {
+    var testCustomer = new Customer({name: 'Test Gordon', age: '26', email: 'sometestemail@gmail.com'});
+    testCustomer.save(function(err, data) {
+      if (err) throw err;
+
+      this.testCustomer = data;
+      done();
+    }.bind(this));
+  });
+  it('should create test customer entry', () => {
+    expect(this.testCustomer.name).to.equal('Test Gordon');
+    expect(this.testCustomer).to.have.property('_id');
+  });
+  it('should hit a PUT route for /customers/:id', (done) => {
+    var id = this.testCustomer._id;
     request('localhost:3000')
-    .put('products/56eae9a71742c8ce5921a273') //revise
-    .send({"name":"mop", "upc":"2554343534", "category":"Cleaning Products", "stock":"36"}) //revise
+    .put('/customers/' + id)
+    .send({name: 'Not Gordon', age: '62', email: 'adifferentemail@em.com'})
     .end((err, res) => {
-      expect(err).to.equal(null);
-      expect(res).to.have.status(200);
-      expect(res).to.be.json;
-      expect(res.body).to.have.property('UPDATED');
-      expect(res.body).to.have.property('name');
-      expect(res.body).to.have.property('upc');
+      expect(err).to.eql(null);
+      // expect(res.body.msg).to.eql('success');
       done();
     });
   });
-  // it('should hit a DEL route for /products/:id', (done) => {
-  //   request('localhost:3000')
-  //   .get('/products/banana') //revise
-  //   .delete('/products/banana') //revise
-  //   .end((err, res) => {
-  //     expect(err).to.be(null);
-  //     expect(res).to.have.status(200);
-  //     expect(res).to.be.json;
-  //     expect(res.body).to.have.property('REMOVED');
-  //     expect(res.body.REMOVED).to.have.property('name');
-  //     done();
-  //   });
-  // });
+  it('should hit a DEL route for /customers/:id', (done) => {
+    request('localhost:3000')
+    .del('/customers/' + this.testCustomer._id)
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      // expect(res.body.msg).to.eql('success');
+      done();
+    });
+  });
+});
+
+//products/id routes
+
+describe('testing PUT/DELETE routes for /products/:id', () => {
+  before((done) => {
+    var testProduct = new Product({name: 'Test Banana', upc: '2dfdsa456', category: 'Produce', stock: '42'});
+    testProduct.save(function(err, data) {
+      if (err) throw err;
+
+      this.testProduct = data;
+      done();
+    }.bind(this));
+  });
+  it('should create test product entry', () => {
+    expect(this.testProduct.name).to.equal('Test Banana');
+    expect(this.testProduct).to.have.property('_id');
+  });
+  it('should hit a PUT route for /products/:id', (done) => {
+    var id = this.testProduct._id;
+    request('localhost:3000')
+    .put('/products/' + id)
+    .send({name: 'Not Banana', upc: '62dfads34234', category: 'Produce', stock: '24'})
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      // expect(res.body.msg).to.eql('success');
+      done();
+    });
+  });
+  it('should hit a DEL route for /products/:id', (done) => {
+    request('localhost:3000')
+    .del('/products/' + this.testProduct._id)
+    .end((err, res) => {
+      expect(err).to.eql(null);
+      // expect(res.body.msg).to.eql('success');
+      done();
+    });
+  });
 });
