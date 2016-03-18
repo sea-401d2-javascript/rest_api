@@ -1,5 +1,6 @@
 'use strict';
 process.env.MONGOLAB_URI = 'mongodb://localhost/arcade-test';
+require(__dirname + '/../server');
 var mongoose = require('mongoose');
 var chai = require('chai');
 var chaiHTTP = require('chai-http');
@@ -7,11 +8,10 @@ chai.use(chaiHTTP);
 
 var request = chai.request;
 var expect = chai.expect;
-require(__dirname + '/../server');
-require('../models/arcades');
+var Arcade = require(__dirname +'./../models/arcades');
+var newId;
 
 describe('testing Arcade REST api routes', () => {
-
   after((done)=>{
     mongoose.connection.db.dropDatabase(function(){
       done();
@@ -46,43 +46,62 @@ describe('testing Arcade REST api routes', () => {
   });
 });
 describe('needs an array to get id', () =>{
-  // beforeEach((done)=>{
-  //   var testArcade = new Arcade({name: 'test arcade'});
-  //   testArcade.save((err, data)=>{
-  //     if (err) throw err;
-  //     this.testArcade = data;
-  //     done();
-  //   }).bind(this);
-  // });
+  beforeEach((done)=>{
+    var testArcade = new Arcade({name: 'test arcade'});
+    testArcade.save((err, data)=>{
+      // if (err) throw err;
+      newId = data._id;
+      this.testArcade = data;
+      done();
+    });
+  });
   // it('should be able to make a note in a beforeEach block', ()=>{
   //   expect(this.testArcade.name).to.eql('test arcade');
   //   expect(this.testArcade).to.have.property('_id');
   // });
   it('GET should receive the /arcades/:id data', (done)=>{
-    var id = this.testArcade.id;
+    // var id = this.testArcade.id;
     request('localhost:3000')
-    .get('/api/arcades/' + id)
+    .get('/api/arcades/' + newId)
     .end(function(err, res) {
       expect(err).to.eql(null);
       expect(res).to.be.status(200);
-      console.log(res.body._id);
+      console.log(res.body.newId);
       expect(res.body).to.exist;
       done();
     });
   });
 
   it('PUT should receive the /arcades/:id data', (done)=>{
-    var id = this.testArcade._id;
+    // var id = this.testArcade._id;
     request('localhost:3000')
-    .put('/api/arcades' + id)
-    .send({name: 'here is an updated arcade'})
+    .put('/api/arcades' + newId)
+    .send({name: 'test PUT name'})
     .end(function(err, res) {
       expect(err).to.eql(null);
       expect(res).to.be.status(200);
-      expect(res.body.msg).to.eql('success');
+      expect(res.body.data['name']).to.eql('test PUT name');
+      expect(res).to.be.json;
       done();
     });
 
+  });
+  it('DELETE should remove the arcade by the id', (done)=>{
+    request('localhost:3000')
+    .delete('/api/arcades'+ newId)
+    .end((err, res)=>{
+      expect(err).to.eql(null);
+      expect(res).to.be.status(200);
+      expect(res).to.be.json;
+      expect(res.body.msg).to.eql('sucessfully deleted arcade');
+      done();
+    });
+  });
+  after((done) => {
+    newId = null;
+    mongoose.connection.db.dropDatabase(() => {
+      done();
+    });
   });
 });
 

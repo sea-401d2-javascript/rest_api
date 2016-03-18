@@ -11,8 +11,5 @@ let GamesSchema = new Schema({
 
 });
 
-
-
-
 let Game = mongoose.model('Game', GamesSchema);
 module.exports = Game;

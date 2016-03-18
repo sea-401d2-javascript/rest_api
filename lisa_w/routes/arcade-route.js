@@ -40,14 +40,17 @@ module.exports = function(router){
      });
    })
      .delete((req, res)=>{
-       console.log('deleted');
-       Arcade.remove({
-         id: req.params.id
-       },function(err, arcade) {
-         if(err) res.send(err);
-         res.json({
-           message: 'sucessfully deleted arcade: ' + arcade});
+       Arcade.findById(req.params.id, (err, arcade)=>{
+         arcade.remove((err, arcades)=>{
+           res.json({message: 'sucessfully deleted arcade'});
+         });
        });
+    //    console.log('deleted');
+    //    Arcade.remove({id: req.params.id},function(err, arcade) {
+    //      if(err) res.send(err);
+    //      res.json({
+    //        message: 'sucessfully deleted arcade'});
+    //    });
      });
   router.route('/arcade-names')
     .get((req, res)=>{

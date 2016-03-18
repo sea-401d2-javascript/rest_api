@@ -15,8 +15,5 @@ let ArcadeSchema = new Schema({
 });
 
 
-
-
-
 let Arcade = mongoose.model('Arcade', ArcadeSchema);
 module.exports = Arcade;

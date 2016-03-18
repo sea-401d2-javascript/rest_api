@@ -8,7 +8,6 @@ chai.use(chaiHTTP);
 var request = chai.request;
 var expect = chai.expect;
 require(__dirname + '/../server');
-
 require('../models/games');
 
 describe('testing Game REST api routes', () => {

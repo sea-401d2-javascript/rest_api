@@ -21,7 +21,7 @@ module.exports = (router) => {
            res.json(games);
          });
        });
-       //games id
+    
   router.route('/games/:id')
        .get((req, res)=>{
          console.log(('GET /games/:id was hit'));
