@@ -165,5 +165,16 @@ describe('integration tests', () => {
         });
       });
     });
+    describe('/states route', () => {
+      it('should return the number of characters and events', (done) => {
+        request('localhost:3000').get('/stats').end((err, response) => {
+          expect(err).to.equal(null);
+          expect(response.status).to.equal(200);
+          expect(response.body.totalCharacters).to.be.above(1);
+          expect(response.body.totalEvents).to.be.above(1);
+          done();
+        });
+      });
+    });
   });  
 });
