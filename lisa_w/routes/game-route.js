@@ -18,7 +18,7 @@ module.exports = (router) => {
          console.log('get was hit');
          Game.find({},(err, games)=>{
            if(err) res.send(err);
-           res.json({data: games});
+           res.json(games);
          });
        });
        //games id
@@ -47,4 +47,16 @@ module.exports = (router) => {
                message: 'sucessfully deleted game: ' + game});
            });
          });
+  router.route('/game-genres')
+           .get((req, res)=>{
+             var genreArray = [];
+             Game.find({}, (err, games)=>{
+               games.forEach((games)=> {
+                 genreArray.push(games.genre);
+               });
+               if (err) res.send(err);
+               res.json({genreArray});
+             });
+           });
+
 };

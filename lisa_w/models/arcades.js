@@ -1,7 +1,6 @@
 'use strict';
 
 let mongoose = require('mongoose');
-let Games = require('./games.js');
 let Schema = mongoose.Schema;
 let ArcadeSchema = new Schema({
   name: String,

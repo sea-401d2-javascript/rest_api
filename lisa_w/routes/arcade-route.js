@@ -1,36 +1,35 @@
 'use strict';
-var Arcade = require('../models/arcades');
+var Arcade = require('../models/arcades.js');
 var bodyParser = require('body-parser');
 
 module.exports = function(router){
   router.use(bodyParser.json());
 
-
-  //arcade routes
   router.route('/arcades')
    .post((req, res)=>{
      console.log('post was hit');
      var newArcade = new Arcade(req.body);
-    //save arcade and check for errors
      newArcade.save((err, arcade)=>{
        if (err) res.send(err);
-       res.json(arcade);
+       res.json({data: arcade});
      });
+
    })
    .get((req, res) =>{
      console.log('get was hit');
      Arcade.find({},(err, arcades)=>{
-       if(err) res.send(err);
+       if(err)  res.send(err);
        res.json(arcades);
+       console.log('hit' + arcades);
      });
    });
-   //arcade id
   router.route('/arcades/:id')
    .get((req, res)=>{
      console.log(('GET /arcade/:id was hit'));
      Arcade.findById(req.params.id, (err, arcade)=>{
        if (err) res.send(err);
        res.json(arcade);
+       console.log(arcade);
      });
    })
    .put((req, res)=>{
@@ -50,4 +49,16 @@ module.exports = function(router){
            message: 'sucessfully deleted arcade: ' + arcade});
        });
      });
+  router.route('/arcade-names')
+    .get((req, res)=>{
+      var nameArray = [];
+      Arcade.find({}, (err, arcades)=>{
+        arcades.forEach((arcade)=> {
+          nameArray.push(arcade.name);
+        });
+        if (err) res.send(err);
+        res.json({nameArray});
+      });
+    });
+
 };

@@ -8,8 +8,10 @@ module.exports = function(router){
 
 
 
-  router.route('/arcades-games/:gameId/:arcadeId')
+  router.route('/game-genres')
     .get((req, res)=>{
+      var genreArray = [];
+      Game
       Game.find({req.params.id})
     })
    .post((req, res)=>{
