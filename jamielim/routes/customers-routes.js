@@ -34,7 +34,7 @@ module.exports = (apiRouter) => {
     .delete((req, res) => {
       Customer.findByIdAndRemove(req.params.id, (err, customer) => {
         if (err) {console.error(err);}
-        res.json(customer);
+        res.json({message: 'Deleted Customer'});
       });
     });
 };

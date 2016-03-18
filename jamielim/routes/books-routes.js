@@ -41,7 +41,7 @@ module.exports = (apiRouter) => {
     .delete((req, res) => {
       Book.findByIdAndRemove(req.params.id, (err, book) => {
         if (err) {console.error(err);}
-        res.json(book);
+        res.json({message: 'Removed Book'});
       });
     });
 };
