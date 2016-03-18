@@ -5,7 +5,7 @@ const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
 const exec = require('child_process').exec;
 
-var paths = ['*.js', 'test/*.js'];
+var paths = ['*.js', 'test/*.js', 'models/*.js'];
 
 var runCommand = function(command) {
   exec(command, (err, stdout, stderr) => {
