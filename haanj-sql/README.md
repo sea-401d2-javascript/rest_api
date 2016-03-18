@@ -7,7 +7,12 @@ This is my submission for the 401 rest_api assignment.
 
 Example text:
 ```
-module.exports.DB_PORT = 'your mongodb uri';
-module.exports.S_PORT = 3000;
+module.exports = {
+  DB: process.env.DB,
+  PORT: Number(process.env.PORT)
+}
+
 ```
-2. I've written a node script to populate the database with randomly-generated entries. Just run `npm run addDocuments` to use.
+2. Start the server with `node index.js`
+
+3. Run tests with `mocha`

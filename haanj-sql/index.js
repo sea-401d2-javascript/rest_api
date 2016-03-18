@@ -1,132 +1,103 @@
 'use strict';
-let S_PORT = process.env.S_PORT || require('./.config').S_PORT;
-let DB_PORT = process.env.DB_PORT || require('./.config').DB_PORT;
+let PORT = process.env.PORT || require('./.config').PORT;
+let DB = process.env.DB || require('./.config').DB;
 
 let bodyParser = require('body-parser');
 let express = require('express');
 let app = express();
 
-let mongoose = require('mongoose');
-let Movie = require('./models/movie_module');
-let Snack = require('./models/snack_module');
-
-mongoose.connect(DB_PORT);
-
+let models = require('./models');
+let Movie = models.Movie;
+let Snack = models.Snack;
 
 app.use(bodyParser.json());
 
-// /Movies routes
+models.sequelize.sync({force: true}).then(function() {
+  Movie.create({
+    name: 'shrek',
+    imdb: 9.9
+  });
+  Movie.create({
+    name: 'Die Hard',
+    imdb: 9.9
+  });
+  Snack.create({
+    name: 'Pizza',
+    description: 'This delicious snack is perfect for any movie night'
+  });
+  Snack.create({
+    name: 'Cabbage',
+    description: 'This delicious snack is perfect for any movie night'
+  });
+  app.listen(PORT, function() {
+    console.log('server started');
+    console.log('listening on PORT: ' + PORT);
+    console.log('DB URI STRING: ' + DB);
+  });
+});
+
+// /movies routes
 app.route('/movies')
   .get((req, res) => {
-    console.log('GET request received for /movies');
-    Movie.find({})
-      .populate('actors')
-      .exec((err, movies) => {
-        if (err) return res.send(err);
-        res.json(movies);
-      });
+    Movie.findAll().then((movies) => {
+      res.send(movies);
+    });
   })
   .post((req, res) => {
-    console.log('POST request received for /movies');
-    var newMovie = new Movie(req.body);
-    newMovie.save((err, movie) => {
-      res.json(movie);
+    Movie.create({
+      name: req.body.name,
+      imdb: req.body.imdb
+    }).then((movie) => {
+      res.send(movie);
     });
   });
 
 app.route('/movies/:id')
   .get((req, res) => {
-    console.log('GET request received for /movies/' + req.params.id);
     Movie.findById(req.params.id)
-      .populate('actors')
-      .exec((err, movie) => {
-        res.json(movie);
+      .then((movie) => {
+        res.send(movie);
       });
   })
-  .put((req, res) => {
-    console.log('PUT request received for /movies/' + req.params.id);
-    Movie.update({_id: req.params.id}, req.body, (err, movie) => {
-      res.json(movie);
-    });
-  })
   .delete((req, res) => {
-    console.log('DELETE request received for /movies/' + req.params.id);
-    Movie.findById(req.params.id, (err, movie) => {
-      movie.remove();
-      res.json(movie);
+    Movie.findById(req.params.id).then((movie) => {
+      console.log('destroying movie id ', req.params.id);
+      movie.destroy()
+        .then(() => {
+          res.send(movie);
+        });
     });
   });
 
-// /Snacks routes
+// /snacks routes
 app.route('/snacks')
   .get((req, res) => {
-    console.log('GET request received for /snacks');
-    Snack.find({}, (err, snacks) => {
-      if (err) return res.send(err);
-      res.json(snacks);
+    Snack.findAll().then((snacks) => {
+      res.send(snacks);
     });
   })
   .post((req, res) => {
-    console.log('POST request received for /snacks');
-    var newSnack = new Snack(req.body);
-    newSnack.save((err, snack) => {
-      res.json(snack);
+    Snack.create({
+      name: req.body.name,
+      description: req.body.description
+    }).then((snack) => {
+      res.send(snack);
     });
   });
 
 app.route('/snacks/:id')
   .get((req, res) => {
-    console.log('GET request received for /snacks/' + req.params.id);
-    Snack.findById(req.params.id, (err, snack) => {
-      res.json(snack);
-    });
-  })
-  .put((req, res) => {
-    console.log('PUT request received for /snacks/' + req.params.id);
-    Snack.update({_id: req.params.id}, req.body, (err, snack) => {
-      res.json(snack);
-    });
-  })
-  .delete((req, res) => {
-    console.log('DELETE request received for /snacks/' + req.params.id);
-    Snack.findById(req.params.id, (err, snack) => {
-      snack.remove();
-      res.json(snack);
-    });
-  });
-
-// /suggest route
-app.route('/suggest')
-  .get((req, res, next) => {
-    console.log('GET request received for /suggest');
-    res.suggestion = {};
-    next();
-  })
-  .get((req, res, next) => {
-    console.log('Getting random movie');
-    Movie.find({})
-      .populate('actors')
-      .exec((err, movies) => {
-        if (err) return res.send(err);
-        let random = Math.floor(Math.random() * movies.length);
-        res.suggestion.movie = movies[random];
-        next();
+    Snack.findById(req.params.id)
+      .then((snack) => {
+        res.send(snack);
       });
   })
-  .get((req, res, next) => {
-    console.log('Getting random snack');
-    Snack.find({}, (err, snacks) => {
-      if (err) return res.send(err);
-      let random = Math.floor(Math.random() * snacks.length);
-      res.suggestion.snack = snacks[random];
-      next();
+  .delete((req, res) => {
+    Snack.findById(req.params.id).then((snack) => {
+      console.log('destroying snack id ', req.params.id);
+      snack.destroy()
+        .then(() => {
+          res.send(snack);
+        });
     });
-  })
-  .get((req, res) => {
-    console.log('Returning random movie and random snack');
-    res.json(res.suggestion);
   });
-
-app.listen(S_PORT, () => {
-  console.log('Server started on port', S_PORT);
-});

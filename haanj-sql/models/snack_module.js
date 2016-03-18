@@ -1,10 +1,8 @@
 'use strict';
-const mongoose = require('mongoose');
-
-const snackSchema = new mongoose.Schema({
-  name: String,
-  ingredients: [String],
-  tags: [String]
-});
-
-module.exports = mongoose.model('Snack', snackSchema);
+module.exports = function(sequelize, DataTypes) {
+  var Snack = sequelize.define('Snack', {
+    name: DataTypes.STRING,
+    description: DataTypes.STRING
+  });
+  return Snack;
+};
