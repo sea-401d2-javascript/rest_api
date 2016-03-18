@@ -41,10 +41,27 @@ app.put('/recipes/:id', (req, res) => {
 
 app.delete('/recipes/:id', (req, res) => {
   Recipes.findById(req.params.id, (err, recipe) => {
-    recipe.remove((err, recipe) => {
-      res.json({message: "recipe removed"});
+    recipe.remove(() => {
+      res.json({message: 'recipe removed'});
     });
   });
+});
+
+// app.get('/search/:ingredient', (req, res) => {
+//   Recipes.find({'ingredients.item': req.params.ingredient}, (err, recipe) => {
+//     res.json(recipe);
+//   });
+//
+// });
+
+app.get('/search/', (req, res) => {
+  // console.log(req.query.name);
+  var ingredient = JSON.parse(req.query.ingredient);
+  Recipes.find({'ingredients.item': ingredient}, (err, recipe) => {
+    console.log(req.query.ingredient);
+    res.json(recipe);
+  });
+
 });
 
 app.get('/chefs', (req, res) => {
@@ -86,8 +103,8 @@ app.put('/chefs/:id', (req, res) => {
 
 app.delete('/chefs/:id', (req, res) => {
   Chefs.findById(req.params.id, (err, chef) => {
-    chef.remove((err, chef) => {
-      res.json({message: "chef removed"});
+    chef.remove(() => {
+      res.json({message: 'chef removed'});
     });
   });
 });
