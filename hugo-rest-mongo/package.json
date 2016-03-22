@@ -1,0 +1,25 @@
+{
+  "name": "hugo-rest-mongo",
+  "version": "1.0.0",
+  "description": "a rest api built on top of mongo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Hugo A Guerra <guerrahugoa@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "mongoose": "^4.4.7"
+  },
+  "devDependencies": {
+    "body-parser": "^1.15.0",
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0",
+    "gulp-mocha": "^2.2.0",
+    "mocha": "^2.4.5"
+  }
+}
