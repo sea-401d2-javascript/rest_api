@@ -2,8 +2,6 @@
 let jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  console.log('authenticate.js headers:')
-  console.log(req.headers);
   let decoded;
   try {
     // header from Authorization: token myToken
@@ -11,7 +9,9 @@ module.exports = (req, res, next) => {
     decoded = jwt.verify(token, process.env.SECRET || 'secrets');
   }
   catch (e) {
-    console.log('authenticate.js', e);
+    console.log('authenticate.js catch error:');
+    console.log(req.headers);
+    console.log(e);
     return res.status(418).json({msg: 'authentication error'}); //I am a teapot
   }
   var User = require('../models/user_module');
