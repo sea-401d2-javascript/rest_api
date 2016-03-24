@@ -5,10 +5,11 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 var expect = chai.expect;
-// var request = chai.request;
+var request = chai.request;
 
 var Beers = require(__dirname + '/../models/beer_model.js');
 var Drinks = require(__dirname + '/../models/drink_model.js');
+var User = require(__dirname + '/../models/user_model.js');
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/testdb';
 
@@ -23,7 +24,7 @@ describe('beers REST api', function() {
   });
 
   it('should be able to create a new beer', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
       .post('/beers')
       .send({name: 'great beer'})
       .end(function(err, res) {
@@ -35,7 +36,7 @@ describe('beers REST api', function() {
   });
 
   it('should get all beers in db', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
     .get('/beers')
     .end(function(err, res) {
       expect(err).to.eql(null);
@@ -62,7 +63,7 @@ describe('beers REST api', function() {
 
     it('should update a beer record', function(done) {
       var id = this.testBeer._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .put('/beers/' + id)
       .send('{"name": "new beer name"}')
       .end(function(err, res) {
@@ -74,7 +75,7 @@ describe('beers REST api', function() {
 
     it('should be able to delete a beer', function(done) {
       var id = this.testBeer._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
         .delete('/beers/' + id)
         .end(function(err, res) {
           expect(err).to.eql(null);
@@ -94,7 +95,7 @@ describe('Drinks REST api', function() {
   });
 
   it('should be able to create a new drink', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
       .post('/drinks')
       .send({name: 'Lemon Drop'})
       .end(function(err, res) {
@@ -106,7 +107,7 @@ describe('Drinks REST api', function() {
   });
 
   it('should get all drinks in db', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
     .get('/drinks')
     .end(function(err, res) {
       expect(err).to.eql(null);
@@ -132,7 +133,7 @@ describe('Drinks REST api', function() {
     });
 
     it('should get all drinks made with a user chosen alcohol', function(done) {
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .get('/search/?alcohol="gin"')
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -143,7 +144,7 @@ describe('Drinks REST api', function() {
 
     it('should update a drink record', function(done) {
       var id = this.testDrink._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .put('/drinks/' + id)
       .send('{"name": "new drink name"}')
       .end(function(err, res) {
@@ -155,7 +156,7 @@ describe('Drinks REST api', function() {
 
     it('should be able to delete a drink', function(done) {
       var id = this.testDrink._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
         .delete('/drinks/' + id)
         .end(function(err, res) {
           expect(err).to.eql(null);
