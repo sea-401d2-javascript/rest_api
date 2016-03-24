@@ -5,6 +5,9 @@ var Character = require(__dirname + '/../models/characters-model.js');
 
 var router = express.Router();
 
+
+
+
 router.get('/', (request,response) => {
   Event.find({}, (eventErr, events) => {
     Character.find({}, (charErr, characters) => {
@@ -18,4 +21,5 @@ router.get('/', (request,response) => {
     });
   });
 });
+
 module.exports = router;
