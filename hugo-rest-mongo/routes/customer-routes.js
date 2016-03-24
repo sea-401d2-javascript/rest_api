@@ -3,12 +3,11 @@
 let express = require('express');
 let authenticate = require('../lib/authenticate');
 let jsonParser = require('body-parser').json();
-let Customer = require('../models/customers-model')
+let Customer = require('../models/customers-model');
 
 const customersRouter = module.exports = exports = express.Router();
 
 
-module.exports = (customersRouter) => {
   customersRouter.route('/customers')
   .get((req, res) => {
     console.log('GET route hit for /customers');
@@ -46,4 +45,3 @@ module.exports = (customersRouter) => {
       });
     });
   });
-}
