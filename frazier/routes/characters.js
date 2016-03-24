@@ -7,6 +7,9 @@ var Character = require(__dirname + '/../models/characters-model.js');
 
 var router = express.Router();
 
+
+
+
 router.get('/', (request, response) => {
   console.log('GET request to /characters made');
   Character.find({}).populate('presentAt', 'name')
@@ -20,6 +23,8 @@ router.get('/', (request, response) => {
     }
   });
 });
+
+
 
 router.post('/', (request, response) => {
   console.log('post to /characters made');
@@ -46,6 +51,9 @@ router.post('/', (request, response) => {
   }
 });
 
+
+
+
 router.get('/:id', (request, response) => {
   console.log('GET request to /characters/:id made');
   Character.find({_id: request.params.id}).populate('presentAt', 'name')
@@ -60,6 +68,9 @@ router.get('/:id', (request, response) => {
     
 });
 
+
+
+
 router.put('/:id', (request, response) => {
   console.log('PUT request to /characters/:id made');
   Character.findOneAndUpdate({_id: request.params.id}, request.body, {new: true}, (err, DBChar) => {
@@ -72,6 +83,9 @@ router.put('/:id', (request, response) => {
     }
   });
 });
+
+
+
 
 router.delete('/:id', (request, response) => {
   console.log('DELETE request to /characters/:id made');
