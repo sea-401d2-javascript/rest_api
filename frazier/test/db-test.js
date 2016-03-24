@@ -49,11 +49,11 @@ describe('integration tests', () => {
         request('localhost:3000').get('/events').end((err, response) => {
           expect(err).to.equal(null);
           expect(response.status).to.equal(200);
-          console.dir(response.body);
-          response.body.forEach((current) => {
-            console.log(current.name);
-            console.log(current.name === 'Riddles in the dark');
-          });
+          // console.dir(response.body);
+          // response.body.forEach((current) => {
+            // console.log(current.name);
+            // console.log(current.name === 'Riddles in the dark');
+          // });
           var DBriddlesInTheDark = response.body.filter((current) => {
             return current.name === 'Riddles in the dark';
           })[0];
@@ -121,8 +121,8 @@ describe('integration tests', () => {
         request('localhost:3000').get('/characters').end((err, response) => {
           expect(err).to.equal(null);
           expect(response.status).to.equal(200);
-          console.log('response.body is');
-          console.dir(response.body);
+          // console.log('response.body is');
+          // console.dir(response.body);
           var DBGimli = response.body.filter((current) => {
             return current.name ==='Gimli';
           })[0];
@@ -137,7 +137,7 @@ describe('integration tests', () => {
           expect(err).to.equal(null);
           expect(response.status).to.equal(200);
           expect(response.body[0].kia).to.equal(false);
-          console.log(response.body);
+          // console.log(response.body);
           done();
         });
       });

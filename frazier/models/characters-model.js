@@ -16,4 +16,5 @@ var characterSchema = new mongoose.Schema({
   // diedAt: {ref: 'Event', type: mongoose.Schema.types.ObjectId}
 });
 
+
 module.exports = mongoose.model('Character', characterSchema);
