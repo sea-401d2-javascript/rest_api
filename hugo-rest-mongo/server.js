@@ -16,9 +16,9 @@ app.use((req, res, next) => {
   next();
 });
 
-let productsRouter = require('./routes/product-routes');
+let authRouter = require('./routes/product-routes');
 let productsRouter = require('./routes/auth-routes');
-let productsRouter = require('./routes/customer-routes');
+let customersRouter = require('./routes/customer-routes');
 
 
 let customers = require(__dirname + '/models/customers-model');
