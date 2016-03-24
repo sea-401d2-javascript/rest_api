@@ -29,6 +29,7 @@ module.exports = (studentsRouter, db) => {
     }).delete((req, res) => {
       Student.findById(req.params.id, (err, student) =>{
         student.remove((err, student) => {
+          console.log(student.ideas);
           res.json({message: 'Student removed'});
         });
       });

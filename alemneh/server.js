@@ -13,7 +13,7 @@ require('./routes/students-routes')(studentsRouter, db);
 
 
 app.use(bodyParser.json());
-app.use('/', ideasRouter);
+app.use('/students', ideasRouter);
 app.use('/', statsRouter);
 app.use('/', studentsRouter);
 
