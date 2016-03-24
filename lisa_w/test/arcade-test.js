@@ -27,7 +27,7 @@ describe('testing Arcade REST api routes', () => {
     });
   });
   it('POST should post new data to /Arcades', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
     .post('/api/arcades')
     .send({name: 'test arcade'})
     .end((err, res) =>{
@@ -40,7 +40,7 @@ describe('testing Arcade REST api routes', () => {
     });
   });
   it('GET should receive the /arcades data', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
     .get('/api/arcades')
     .end((err, res)=> {
       expect(err).to.eql(null);
@@ -68,7 +68,7 @@ describe('needs an array to get id', () =>{
     expect(this.testArcade).to.have.property('_id');
   });
   it('GET should receive the /arcades/:id data', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
     .get('/api/arcades/' + newId)
     .end(function(err, res) {
       expect(err).to.eql(null);
@@ -80,7 +80,7 @@ describe('needs an array to get id', () =>{
   });
 
   it('PUT should receive the /arcades/:id data', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
     .put('/api/arcades/' + newId)
     .send({name: 'test PUT name'})
     .end(function(err, res) {
@@ -93,7 +93,7 @@ describe('needs an array to get id', () =>{
 
   });
   it('DELETE should remove the arcade by the id', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
         .delete('/api/arcades/'+ newId)
         .end((err, res)=>{
           expect(err).to.eql(null);
@@ -103,7 +103,7 @@ describe('needs an array to get id', () =>{
         });
   });
   it('should make an array of arcade names for /arcade-names', (done)=>{
-    request('localhost:3000')
+    request('localhost:6000')
       .get('/api/arcade-names')
       .end((err, res)=>{
         expect(err).to.eql(null);

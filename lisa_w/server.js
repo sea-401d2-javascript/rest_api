@@ -4,7 +4,7 @@ let mongoose = require('mongoose');
 let express = require('express');
 let app = express();
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 6000;
 let DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
 mongoose.connect(DB_PORT);
 let router = express.Router();
