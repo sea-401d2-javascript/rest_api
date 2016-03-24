@@ -7,7 +7,7 @@ const app = module.exports = exports = express();
 var port = process.env.PORT || 6000;
 let DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
 mongoose.connect(DB_PORT);
-let router = express.Router();
+// let router = express.Router();
 
 //middleware
 app.use((req, res, next)=>{
@@ -17,15 +17,16 @@ app.use((req, res, next)=>{
   next();
 });
 
-require('./routes/arcade-route')(router);
-require('./routes/game-route')(router);
+const arcadeRouter = require(__dirname + '/routes/arcade-route');
+const gameRouter = require(__dirname + '/routes/game-route');
 const userRouter = require(__dirname + '/routes/user-routes');
 const authRouter = require(__dirname + '/routes/auth-routes');
 
 
-app.use('/api', router);
+app.use('/api', gameRouter);
 app.use('/api', userRouter);
 app.use('/api', authRouter);
+app.use('/api', arcadeRouter);
 
 app.listen(port);
 console.log('Magic is happening on port ' + port);

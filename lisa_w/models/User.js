@@ -1,19 +1,25 @@
 'use strict';
-let bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 // let config = require('../lib/config');
-let jwt = require('jsonwebtoken');
-let mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 // let Schema = mongoose.Schema;
 
-let userSchema = new mongoose.Schema({
-  name: {
+var userSchema = new mongoose.Schema({
+  username: {
     type: String,
     unique: true,
     required: true
   },
-  password: {
-    type: String,
-    required: true
+  authentication: {
+    password: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      unique: true
+    }
   }
 });
 

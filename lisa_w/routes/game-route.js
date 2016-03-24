@@ -2,10 +2,10 @@
 var Game = require('../models/Game');
 var bodyParser = require('body-parser');
 
-module.exports = (router) => {
-  router.use(bodyParser.json());
+module.exports = (gameRouter) => {
+  gameRouter.use(bodyParser.json());
 
-  router.route('/games')
+  gameRouter.route('/games')
        .post((req, res)=>{
          console.log('post /games was hit');
          var newGame = new Game(req.body);
@@ -22,7 +22,7 @@ module.exports = (router) => {
          });
        });
 
-  router.route('/games/:id')
+  gameRouter.route('/games/:id')
        .get((req, res)=>{
          console.log(('GET /games/:id was hit'));
          Game.findById(req.params.id, (err, game)=>{
@@ -47,7 +47,7 @@ module.exports = (router) => {
                message: 'sucessfully deleted game: ' + game});
            });
          });
-  router.route('/game-genres')
+  gameRouter.route('/game-genres')
            .get((req, res)=>{
              var genreArray = [];
              Game.find({}, (err, games)=>{
