@@ -1,6 +1,6 @@
 'use strict';
 
-let noBuffer = require('./lib/no-buffer.js');
+let noBuffer = require('../lib/no-buffer.js');
 
 module.exports = exports = function(req, res, next) {
   try {

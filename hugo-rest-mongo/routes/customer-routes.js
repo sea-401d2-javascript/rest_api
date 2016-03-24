@@ -1,9 +1,9 @@
 'use strict';
 
 let express = require('express');
-let authenticate = require('./lib/authenticate');
+let authenticate = require('../lib/authenticate');
 let jsonParser = require('body-parser').json();
-let Customer = require('./models/customers-model')
+let Customer = require('../models/customers-model')
 
 const customersRouter = module.exports = exports = express.Router();
 
@@ -43,6 +43,7 @@ module.exports = (customersRouter) => {
     Customer.findById(req.params.id, (err, customer) => {
       customer.remove((err, customer) => {
         res.json({message: 'customer removed'});
-      })
-    })
+      });
+    });
   });
+}

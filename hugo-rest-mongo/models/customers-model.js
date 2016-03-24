@@ -2,7 +2,7 @@
 
 let mongoose = require('mongoose');
 let bcrypt = require('bcrypt');
-let jwt = require('jwt');
+let jwt = require('jsonwebtoken');
 
 let customerSchema = new mongoose.Schema({ //changed from const
   name: String,

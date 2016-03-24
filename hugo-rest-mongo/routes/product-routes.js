@@ -1,10 +1,10 @@
-' use strict';
+'use strict';
 
 let express = require('express');
-let jsonParser = rquire('body-parser').json();
-let Product = require('./models/products-model');
-let handleDBError = require('./lib/db-error-handle');
-let authenticate = require('./lib/authenticate');
+let jsonParser = require('body-parser').json();
+let Product = require('../models/products-model');
+let handleDBError = require('../lib/db-error-handle');
+let authenticate = require('../lib/authenticate');
 
 var productsRouter = module.exports = exports = express.Router();
 

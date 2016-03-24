@@ -1,7 +1,7 @@
 'use strict';
 
 let jwt = require('jsonwebtoken');
-let Customer = require('./models/customers-model') ;
+let Customer = require('../models/customers-model') ;
 
 module.exports = (req, res, next) => {
   var decoded;
