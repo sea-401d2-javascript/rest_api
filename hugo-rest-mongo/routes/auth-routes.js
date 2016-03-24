@@ -10,13 +10,14 @@ var authRouter = module.exports = exports = express.Router();
 
 authRouter.post('/createaccount', jsonParser, (req, res) => {
   var newCustomer = new Customer();
-  if (!((req.body.name || '').length && (req.body.password || '').length > 8)) {
+  if (!((req.body.name || '').length && (req.body.password || '').length > 6)) {
+    debugger;
     return res.status(400).json({msg: 'Sorry. The username or password you entered is invalid.'});
   }
 
   newCustomer.username = req.body.name || req.body.email;
-  newCustomer.authentication.email = req.body.email;
-  newCustomer.hashPassword(req.body.password);
+  newCustomer.email = req.body.email;
+  newCustomer.password = req.body.password;
   newCustomer.save((err, data) => {
     if (err) return handleDBError(err, res);
     res.status(200).json({token: data.generateToken()});
