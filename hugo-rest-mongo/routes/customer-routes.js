@@ -38,8 +38,10 @@ const customersRouter = module.exports = exports = express.Router();
     });
   })
   .delete((req, res) => {
+    console.log('DEL req params id is: ', req.params.id);
     console.log('DEL route hit for /customers/:id');
     Customer.findById(req.params.id, (err, customer) => {
+      console.log('delete customer is: ', customer);
       customer.remove((err, customer) => {
         res.json({message: 'customer removed'});
       });

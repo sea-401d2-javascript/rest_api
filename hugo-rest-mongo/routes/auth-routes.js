@@ -9,9 +9,8 @@ let baseHTTP = require('../lib/base-http');
 var authRouter = module.exports = exports = express.Router();
 
 authRouter.post('/createaccount', jsonParser, (req, res) => {
-  var newCustomer = new Customer();
+  var newCustomer = new Customer(req.body);
   if (!((req.body.name || '').length && (req.body.password || '').length > 6)) {
-    debugger;
     return res.status(400).json({msg: 'Sorry. The username or password you entered is invalid.'});
   }
 
@@ -26,15 +25,17 @@ authRouter.post('/createaccount', jsonParser, (req, res) => {
 
 
 authRouter.post('/login', baseHTTP, (req, res) => {
-  Customer.findOne({'authentication.email': req.baseHTTP.email}, (err, customer) => {
+  console.log('authentication name is ', req.baseHTTP.name);
+  Customer.findOne({name: req.baseHTTP.name}, (err, customer) => {
+    console.log('customer is: ', customer);
     if (err) {
       console.log(err);
-      return res.status(401).json({msg: 'Sorry, something is wrong with the credentials'});
+      return res.status(401).json({msg: 'Sorry, something is wrong with the credentials customer not found'});
     }
 
-    if (!customer) return res.status(401).json({msg: 'Sorry, something went wrong with the credentials'});
+    if (!customer) return res.status(401).json({msg: 'Sorry, something went wrong with the credentials there is no customer'});
 
-    if (!customer.compareHash(req.baseHTTP.password)) return res.status(401).json({msg: 'Sorry, something is wrong with the credentials'});
+    if (!customer.compareHash(req.baseHTTP.password)) return res.status(401).json({msg: 'Sorry, something is wrong with the credentials wrong password'});
 
     res.json({token: customer.generateToken()});
   });

@@ -11,10 +11,11 @@ let url = require('url');
 let fs = require('fs');
 let mongoose = require('mongoose');
 let Customer = require('../models/customers-model');
+process.env.MONGOLAB_URI = 'mongodb://localhost/testdb';
 
 let userToken;
 
-// require('../server');
+require('../server');
 
 describe('testing customer-related GET and POST routes', () => {
   it('should make a new user with given credentials', (done) => {
@@ -63,7 +64,7 @@ describe('testing customer-related PUT and DEL routes', () => {
     request('localhost:3000')
     .put('/customers/' + id)
     .set('Authorization', 'token' + userToken)
-    .send({"name":"another name"})
+    .send({"name":"anothername"})
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.status).to.equal(200);
@@ -73,12 +74,17 @@ describe('testing customer-related PUT and DEL routes', () => {
   });
   it('should delete created customer', (done) => {
     request('localhost:3000')
-    .delete('/customers' + id)
-    .set('Autorization', 'token' + userToken)
+    .delete('/customers/' + id)
+    .set('Authorization', 'token' + userToken)
     .end((err, res) => {
       expect(res.status).to.equal(200);
       done();
     });
   });
 
-})
+});
+after((done) => {
+  mongoose.connection.db.dropDatabase(() => {
+    done();
+  });
+});

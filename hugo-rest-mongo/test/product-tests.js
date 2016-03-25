@@ -13,15 +13,18 @@ let mongoose = require('mongoose');
 let Customer = require('../models/customers-model')
 let Product = require('../models/products-model');
 
+process.env.MONGOLAB_URI = 'mongodb://localhost/testdb';
+
+
 let productUserToken;
 
-// require('../server');
+require('../server');
 
 describe('testing product creation using access token', () => {
   it('should create a new Customer entry', (done) => {
     request('localhost:3000')
     .post('/createaccount')
-    .send({"name":"product user", "age":"23", "email":"123json@gmail.com", "password":"password123"})
+    .send({"name":"productuser", "age":"23", "email":"123json@gmail.com", "password":"password123"})
     .end((err, res) => {
       expect(err).to.equal(null);
       done();
@@ -30,7 +33,7 @@ describe('testing product creation using access token', () => {
   it('should find the user previously created and respond with token', (done) => {
     request('localhost:3000')
     .post('/login')
-    .auth('product user:password123')
+    .auth('productuser:password123')
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.body).to.have.property('token');
@@ -76,7 +79,7 @@ describe('testing product PUT and DEL using token', () => {
   });
   it('should make an update to test product', (done) => {
     request('localhost:3000')
-    .put('/products' + id)
+    .put('/products/' + id)
     .set('Authorization', 'token' + productUserToken)
     .send({"title":"replace umbrella"})
     .end((err, res) => {
@@ -87,12 +90,19 @@ describe('testing product PUT and DEL using token', () => {
   });
   it('should delete test product', (done) => {
     request('localhost:3000')
-    .delete('/products' + id)
+    .delete('/products/' + id)
     .set('Authorization', 'token' + productUserToken)
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.status).to.equal(200);
       expect(res).to.be.a('object');
+      done();
     });
+  });
+});
+
+after((done) => {
+  mongoose.connection.db.dropDatabase(() => {
+    done();
   });
 });
