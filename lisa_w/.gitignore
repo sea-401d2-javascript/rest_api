@@ -1,0 +1,4 @@
+node_modules
+db
+routes/agg-route.js
+models/index.js
