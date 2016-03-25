@@ -24,11 +24,13 @@ describe('Integration Tests (User Routes)', () => {
 
     it('should create a new user', (done) => {
       request('localhost:3000')
-        .post('/users')
+        .post('/signup')
         .send({
-          name: 'Ada Byron',
-          group: 'Garden Brigade',
-          password: 'daddy'
+          username: 'Ada Byron',
+          authentication: {
+            email: 'ada@babbage.io', 
+            password: 'daddy'
+          }
         })
         .end((err, res) => {
           ada_id = res.body._id;
@@ -41,11 +43,13 @@ describe('Integration Tests (User Routes)', () => {
 
     it('should create another user', (done) => {
       request('localhost:3000')
-        .post('/users')
+        .post('/signup')
         .send({
           name: 'Alan Turing',
-          group: 'Garden Brigade',
-          password: 'apple'
+          authentication: {
+            email: 'turing@hut8.co.uk',
+            password: 'apple'
+          }
         })
         .end((err, res) => {
           alan_id = res.body._id;
@@ -101,13 +105,15 @@ describe('Integration Tests (User Routes)', () => {
   });
 
   describe('test token generation', () => {
-    before(function(done) {
+    before((done) => {
       request('localhost:3000')
-        .post('/users')
+        .post('/signup')
         .send({
           name: 'Donald Knuth',
-          group: 'Stanford',
-          password: 'grammar'
+          authentication: {
+            email: 'taocp@cs.stanford.edu',
+            password: 'grammar'
+          }
         })
         .end(() => {
           done();

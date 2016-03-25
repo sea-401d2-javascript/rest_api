@@ -8,7 +8,7 @@ const MONGO_DB = process.env.MONGO_DB || 'mongodb://localhost/db';
 mongoose.connect(MONGO_DB);
 
 let authRouter = express.Router();
-require('./routes/auth_routes')(loginRouter);
+require('./routes/auth_routes')(authRouter);
 
 let apiRouter = express.Router();
 require('./routes/user_routes')(apiRouter);

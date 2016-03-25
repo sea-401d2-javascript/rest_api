@@ -5,27 +5,28 @@ let bcrypt = require('bcrypt');
 let jwt = require('jsonwebtoken');
 
 let UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Name required']
-  },
-  group: String,
-  password: {
-    type: String,
-    required: [true, 'Password required']
+  username: String,
+  authentication: {
+    email: String,
+    password: String
   }
 });
 
-UserSchema.methods.generateHash = function(password) {
-  return bcrypt.hashSync(password, 10);
+UserSchema.methods.hashPassword = function(password) {
+  var hash
+    = this.authentication.password
+    = bcrypt.hashSync(password, 8);
+  return hash;
 }; 
 
-UserSchema.methods.compareHash = function(password) {
-  return bcrypt.compareSync(password, this.password);
+UserSchema.methods.comparePassword = function(password) {
+  return bcrypt.compareSync(password,
+      this.authentication.password);
 };
 
 UserSchema.methods.generateToken = function() {
-  return jwt.sign({_id: this._id}, 'FUNNYSTUFF');
+  return jwt.sign({_id: this._id},
+      process.env.SECRET || 'FUNNYSTUFF');
 };
 
 module.exports = mongoose.model('User', UserSchema);
