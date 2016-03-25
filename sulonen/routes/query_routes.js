@@ -10,7 +10,7 @@ module.exports = (router) => {
     .get((req, res) => {
       let barName = JSON.parse(req.query.name);
       Bar.find({'name':barName}, (err, bar) => {
-        if (err) return res.json(err);
+        if (err) return console.log(err);
         res.send(bar[0].name + ' is open ' + bar[0].hours);
       });
     });
