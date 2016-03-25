@@ -7,21 +7,18 @@ module.exports = (studentsRouter, db) => {
 
   studentsRouter.route('/signup')
     .post((req, res) => {
-      console.log('HIT');
-      Student.find({name: req.body.name}, (err, student) => {
-        debugger;
+      Student.findOne({name: req.body.name}, (err, student) => {
         if(err) throw err;
-        console.log('student: '+typeof student);
-        if(Array.isArray(student)) {
+        if(!student) {
           var newStudent = new Student(req.body);
-          console.log(req.body);
           newStudent.save((err, student) => {
-            res.json(student);
+            res.json({
+              success: true,
+              data:student
+            });
           });
-          // return res.end();
         }else {
-          // res.status(401).json({error: 'Username taken!'});
-          // return res.end();
+          res.status(401).json({error: 'Username taken!'});
         }
       });
 

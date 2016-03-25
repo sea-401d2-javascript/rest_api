@@ -3,7 +3,7 @@ let Student = require(__dirname + '/../models/students');
 let jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  var token = req.body.token || req.headers['x-access-token'];
+  var token = req.body.token || req.headers['token'];
   console.log(token);
 
   if(token) {
