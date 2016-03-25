@@ -5,7 +5,8 @@ let bcrypt = require('bcrypt');
 let jwt = require('jsonwebtoken');
 
 let customerSchema = new mongoose.Schema({ //changed from const
-  name: {type: String, unique: true},
+  // name: {type: String, unique: true},
+  name: String,
   age: Number,
   email: String,
   password: String,
