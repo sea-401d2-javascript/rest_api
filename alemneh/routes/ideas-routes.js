@@ -11,7 +11,6 @@ module.exports = (ideaRouter, db) => {
          .populate('ideas')
          .exec((err, student) => {
            if(err) throw err;
-           console.log(student);
            res.send('Here is your list of ideas\n'+student.ideas);
          });
     })

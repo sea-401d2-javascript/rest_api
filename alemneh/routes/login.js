@@ -12,6 +12,9 @@ module.exports = (loginRouter, db) => {
       let password = authArray[1];
       Student.findOne({name:name}, (err, student) => {
         if(err) throw err;
+        if(!student) {
+          return res.json({status: 'failure', message: 'Invalid user!'});
+        }
         let valid = student.compareHash(password);
         if(!valid) {
           res.json({status: 'failure', message: 'Wrong password!'});

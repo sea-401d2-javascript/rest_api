@@ -4,7 +4,6 @@ let jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   var token = req.body.token || req.headers['token'];
-  console.log(token);
 
   if(token) {
     jwt.verify(token, 'CHANGE ME', function(err, decoded) {
