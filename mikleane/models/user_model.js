@@ -1,19 +1,15 @@
 'use strict';
 
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+let mongoose = require('mongoose');
+let bcrypt = require('bcrypt');
+let jwt = require('jsonwebtoken');
 
-var userSchema = new mongoose.Schema({
+let userSchema = new mongoose.Schema({
   name: {type: String, required: true, unique: true},
   password: {type: String, required: true}
 });
 
-// userSchema.pre('save', function(next) {
-//   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
-//   next();
-// });
-userSchema.methods.hashPassword = function(password){
+userSchema.methods.hashPassword = function(password) {
   var hash = this.password = bcrypt.hashSync(password, 8);
   return hash;
 };

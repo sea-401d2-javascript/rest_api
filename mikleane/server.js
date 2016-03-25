@@ -9,19 +9,13 @@ mongoose.connect(DB_PORT);
 
 app.use(bodyParser.json());
 
-// app.get('/login')
-
-
-const beersRouter = require(__dirname + '/routes/beer_routes');
-const drinksRouter = require(__dirname + '/routes/drink_routes');
-const publicRouter = require(__dirname + '/routes/user_routes');
-// const userRouter = require(__dirname + '/routes/user_routes');
+let beersRouter = require(__dirname + '/routes/beer_routes');
+let drinksRouter = require(__dirname + '/routes/drink_routes');
+let publicRouter = require(__dirname + '/routes/user_routes');
 
 app.use('/', beersRouter);
 app.use('/', drinksRouter);
 app.use('/', publicRouter);
-// app.use('/api', userRouter);
-
 
 app.listen(3000, () => {
   console.log('server started');

@@ -1,14 +1,11 @@
 'use strict';
 
-const express = require('express');
-const tokenAuth = require(__dirname + '/../lib/tokenauth');
-// let bodyParser = require('body-parser');
-const Beers = require(__dirname + '/../models/beer_model');
-// const jwtAuth = require(__dirname + '/../lib/tokenauth.js');
+let express = require('express');
+let tokenAuth = require(__dirname + '/../lib/tokenauth');
+let Beers = require(__dirname + '/../models/beer_model');
 
-var beerRouter = module.exports = exports = express.Router();
+let beerRouter = module.exports = exports = express.Router();
 
-// beerRouter.use(bodyParser.json());
 
 beerRouter.get('/beers', tokenAuth, (req, res) => {
   Beers.find({}, (err, beers)=> {
