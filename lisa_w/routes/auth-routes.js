@@ -9,12 +9,14 @@ const basicHTTP = require(__dirname + '/../lib/http-middleware');
 var authRouter = module.exports = exports = express.Router();
 
 authRouter.post('/signup', jsonParser, (req, res)=>{
+  console.log('hit /signup');
   var newUser = new User();
   if(!(req.body.email || '').length && (req.body.password || '').length > 7) {
     return res.status(400).json({msg: 'invalid email and password'});
   }
   newUser.username = req.body.username;
-  newUser.hashPassword(req.body.password);
+  newUser.authentication.password = req.body.password;
+  debugger;
   newUser.authentication.email = req.body.email;
   newUser.save((err, data)=>{
     if(err) return dbErrorHandler(err, res);

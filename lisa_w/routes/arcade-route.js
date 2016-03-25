@@ -8,10 +8,9 @@ const jwtAuth = require(__dirname + '/../lib/jwt-auth');
 
 var arcadeRouter = module.exports = exports = express.Router();
 
-// module.exports = function(arcadeRouter){
-//   router.use(bodyParser.json());
+
 arcadeRouter.post('/arcades', jwtAuth, jsonParser, (req, res)=>{
-    //  console.log('post was hit');
+  console.log('post was hit');
   var newArcade = new Arcade(req.body);
   newArcade.userId = req.user._id;
   newArcade.save((err, arcade)=>{
