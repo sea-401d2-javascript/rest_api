@@ -14,13 +14,13 @@ let Customer = require('../models/customers-model');
 
 let userToken;
 
-require('../server');
+// require('../server');
 
 describe('testing customer-related GET and POST routes', () => {
   it('should make a new user with given credentials', (done) => {
     request('localhost:3000')
     .post('/createaccount')
-    .send('{"name":"login user", "age":"23", "email":"123json@gmail.com", "password":"password123"}')
+    .send({"name":"loginuser", "age":"23", "email":"123jsdon@gmail.com", "password":"password123"})
     .end((err, res) => {
       expect(err).to.equal(null);
       done();
@@ -29,7 +29,7 @@ describe('testing customer-related GET and POST routes', () => {
   it('should find created user and return a shiny Token', (done) => {
     request('localhost:3000')
     .post('/login')
-    .auth('login user:password123')
+    .auth('loginuser:password123')
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.body).to.have.property('token');
@@ -56,16 +56,16 @@ describe('testing customer-related PUT and DEL routes', () => {
     let testCustomer = new Customer({name: 'test smith', age: 25, email: '123@gmail.com', password:'testpassword'});
     testCustomer.save((err, data) => {
       id = data._id;
-      done();
     });
+    done();
   });
   it('should update an existing customer', (done) => {
     request('localhost:3000')
     .put('/customers/' + id)
     .set('Authorization', 'token' + userToken)
-    .send('{"name":"another name"}')
+    .send({"name":"another name"})
     .end((err, res) => {
-      expect(err).to.be(null);
+      expect(err).to.equal(null);
       expect(res.status).to.equal(200);
       expect(res).to.be.a('object');
       done();

@@ -13,16 +13,16 @@ let mongoose = require('mongoose');
 let Customer = require('../models/customers-model')
 let Product = require('../models/products-model');
 
-let userToken;
+let productUserToken;
 
-require('./server');
+// require('../server');
 
 describe('testing product creation using access token', () => {
-  it('should create a new Customer entry' (done) => {
+  it('should create a new Customer entry', (done) => {
     request('localhost:3000')
     .post('/createaccount')
-    .send('{"name":"product user", "age":"23", "email":"123json@gmail.com", "password":"password123"}')
-    .end((req, res) => {
+    .send({"name":"product user", "age":"23", "email":"123json@gmail.com", "password":"password123"})
+    .end((err, res) => {
       expect(err).to.equal(null);
       done();
     });
@@ -34,26 +34,26 @@ describe('testing product creation using access token', () => {
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.body).to.have.property('token');
-      userToken = res.body.token;
+      productUserToken = res.body.token;
       done();
     });
   });
   it('should return successfully when querying for a product', (done) => {
     request('localhost:3000')
     .get('/products')
-    .set('Authorization', 'token' + userToken)
+    .set('Authorization', 'token' + productUserToken)
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.status).to.equal(200);
-      expect(res).to.be.a('object')
+      expect(res).to.be.a('object');
       done();
     });
   });
   it('should create a product using generated token', (done) => {
-    request('localhost:3000');
+    request('localhost:3000')
     .post('/products')
-    .set('Authorization', 'token' + userToken)
-    .send('{"name":"umbrella", "upc":"343464536", "category":"seasonal", "stock":"45"}')
+    .set('Authorization', 'token' + productUserToken)
+    .send({"name":"umbrella", "upc":"343464536", "category":"seasonal", "stock":"45"})
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.status).to.equal(200);
@@ -71,14 +71,14 @@ describe('testing product PUT and DEL using token', () => {
     let productTest = new Product({name: "test umbrella"});
     productTest.save((err, data) => {
       id = data._id;
-      done();
     });
+    done();
   });
   it('should make an update to test product', (done) => {
     request('localhost:3000')
     .put('/products' + id)
-    .set('Authorization', 'token' + userToken)
-    .send('{"title":"replace umbrella"}')
+    .set('Authorization', 'token' + productUserToken)
+    .send({"title":"replace umbrella"})
     .end((err, res) => {
       expect(res.status).to.equal(200);
       expect(res).to.be.a('object');
@@ -88,7 +88,7 @@ describe('testing product PUT and DEL using token', () => {
   it('should delete test product', (done) => {
     request('localhost:3000')
     .delete('/products' + id)
-    .set('Authorization', 'token' + userToken)
+    .set('Authorization', 'token' + productUserToken)
     .end((err, res) => {
       expect(err).to.equal(null);
       expect(res.status).to.equal(200);
