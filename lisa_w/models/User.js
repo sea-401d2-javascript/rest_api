@@ -23,14 +23,14 @@ var userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre('save', function(next){
-  this.authentication.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
-  next();
-});
-// userSchema.methods.hashPassword = function(password){
-//   var hash = this.authentication.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
-//   return hash;
-// };
+// userSchema.pre('save', function(next){
+//   this.authentication.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
+//   next();
+// });
+userSchema.methods.hashPassword = function(password){
+  var hash = this.authentication.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
+  return hash;
+};
 
 userSchema.methods.comparePassword = function(password){
   return bcrypt.compareSync(password, this.authentication.password);
