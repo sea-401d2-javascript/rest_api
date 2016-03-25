@@ -1,13 +1,13 @@
 'use strict';
 let express = require('express');
-// let bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 let app = module.exports = express();
 let mongoose = require('mongoose');
 
 let DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
 mongoose.connect(DB_PORT);
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 // app.get('/login')
 

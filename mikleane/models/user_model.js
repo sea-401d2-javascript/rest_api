@@ -9,10 +9,14 @@ var userSchema = new mongoose.Schema({
   password: {type: String, required: true}
 });
 
-userSchema.pre('save', function(next) {
-  this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
-  next();
-});
+// userSchema.pre('save', function(next) {
+//   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+//   next();
+// });
+userSchema.methods.hashPassword = function(password){
+  var hash = this.password = bcrypt.hashSync(password, 8);
+  return hash;
+};
 
 userSchema.methods.compareHash = function(password) {
   return bcrypt.compareSync(password, this.password);
