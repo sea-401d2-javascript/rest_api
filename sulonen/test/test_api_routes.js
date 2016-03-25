@@ -10,8 +10,8 @@ const expect = chai.expect;
 process.env.MONGO_DB = 'mongodb://localhost/test';
 require('./../server');
 
-describe('REST API Integration Tests', () => {
-  after(function(done) {
+describe('Integration Tests (API Routes)', () => {
+  after((done) => {
     mongoose.connection.db.dropDatabase(() => {
       done();
     });
@@ -56,8 +56,7 @@ describe('REST API Integration Tests', () => {
     it('should get an array of bars', (done) => {
       request('localhost:3000')
         .get('/bars')
-        .end(function(err, res) {
-          console.log(res.body);
+        .end((err, res) => {
           expect(err).to.eql(null);
           expect(typeof res.body).to.eql('object');
           expect(Array.isArray(res.body.data)).to.eql(true);
@@ -68,7 +67,7 @@ describe('REST API Integration Tests', () => {
     it('should get a bar', (done) => {
       request('localhost:3000')
         .get('/bars/' + bar_id)
-        .end(function(err, res) {
+        .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.name).to.equal('Hatties Hat');
           expect(res.body).to.have.property('_id');
@@ -80,7 +79,7 @@ describe('REST API Integration Tests', () => {
       request('localhost:3000')
         .put('/bars/' + bar_id)
         .send({neighborhood: 'Ballard Ave'})
-        .end(function(err, res) {
+        .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.msg).to.eql('success');
           done();
@@ -90,7 +89,7 @@ describe('REST API Integration Tests', () => {
     it('should be able to delete a bar', (done) => {
       request('localhost:3000')
       .del('/bars/' + bar_id)
-      .end(function(err, res) {
+      .end((err, res) => {
         expect(err).to.eql(null);
         expect(res.body.msg).to.eql('bar removed');
         done();
@@ -141,8 +140,7 @@ describe('REST API Integration Tests', () => {
     it('should get an array of bands', (done) => {
       request('localhost:3000')
         .get('/bands')
-        .end(function(err, res) {
-          console.log(res.body);
+        .end((err, res) => {
           expect(err).to.eql(null);
           expect(typeof res.body).to.eql('object');
           expect(Array.isArray(res.body.data)).to.eql(true);
@@ -154,7 +152,7 @@ describe('REST API Integration Tests', () => {
       request('localhost:3000')
         .put('/bands/' + band_id)
         .send({city: 'Den Hague'})
-        .end(function(err, res) {
+        .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.msg).to.eql('success');
           done();
@@ -164,7 +162,7 @@ describe('REST API Integration Tests', () => {
     it('should be able to delete a band', (done) => {
       request('localhost:3000')
       .del('/bands/' + band_id)
-      .end(function(err, res) {
+      .end((err, res) => {
         expect(err).to.eql(null);
         expect(res.body.msg).to.eql('band removed');
         done();

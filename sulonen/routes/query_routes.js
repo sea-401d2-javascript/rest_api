@@ -1,19 +1,17 @@
 'use strict';
 
-const express = require('express');
-const router = express.Router();
-const parser = require('body-parser');
+let parser = require('body-parser');
+let Bar = require('./../models/bar_model');
 
-const Bar = require('./../models/bar_model.js');
+module.exports = (router) => {
+  router.use(parser.json());
 
-router.use(parser.json());
-
-router.route('/bar/')
-  .get((req, res) => {
-    let barName = JSON.parse(req.query.name);
-    Bar.find({'name':barName}, (err, bar) => {
-      res.send(bar[0].name + ' is open ' + bar[0].hours);
+  router.route('/bar/')
+    .get((req, res) => {
+      let barName = JSON.parse(req.query.name);
+      Bar.find({'name':barName}, (err, bar) => {
+        if (err) return res.json(err);
+        res.send(bar[0].name + ' is open ' + bar[0].hours);
+      });
     });
-  });
-
-module.exports = router;
+};
