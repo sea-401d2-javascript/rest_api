@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = exports = (buf) => {
+module.exports = exports = (buff) => {
   for (let i = 0; i < buff.length; i++) {
-    buf.writeUInt(0, i);
+    buff.writeUInt8(0, i);
   }
 };

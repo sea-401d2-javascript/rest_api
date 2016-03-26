@@ -17,9 +17,7 @@ describe('Integration Tests (User Routes)', () => {
     });
   });
 
-  let ada_id = '',
-    alan_id = '';
-
+  var ada_id, alan_id;
   describe('test user routes', () => {
 
     it('should create a new user', (done) => {
@@ -27,16 +25,13 @@ describe('Integration Tests (User Routes)', () => {
         .post('/signup')
         .send({
           username: 'Ada Byron',
-          authentication: {
-            email: 'ada@babbage.io', 
-            password: 'daddy'
-          }
+          email: 'ada@babbage.io', 
+          password: 'daddy123'
         })
         .end((err, res) => {
           ada_id = res.body._id;
           expect(err).to.eql(null);
-          expect(res.body.name).to.equal('Ada Byron');
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('token');
           done();
         });
     });
@@ -45,17 +40,14 @@ describe('Integration Tests (User Routes)', () => {
       request('localhost:3000')
         .post('/signup')
         .send({
-          name: 'Alan Turing',
-          authentication: {
-            email: 'turing@hut8.co.uk',
-            password: 'apple'
-          }
+          username: 'Alan Turing',
+          email: 'turing@hut8.co.uk',
+          password: 'apple123'
         })
         .end((err, res) => {
           alan_id = res.body._id;
           expect(err).to.eql(null);
-          expect(res.body.name).to.equal('Alan Turing');
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('token');
           done();
         });
     });
@@ -76,7 +68,7 @@ describe('Integration Tests (User Routes)', () => {
         .get('/users/' + ada_id)
         .end((err, res) => {
           expect(err).to.eql(null);
-          expect(res.body.name).to.equal('Ada Byron');
+          expect(res.body.username).to.equal('Ada Byron');
           expect(res.body).to.have.property('_id');
           done();
         });
@@ -110,10 +102,8 @@ describe('Integration Tests (User Routes)', () => {
         .post('/signup')
         .send({
           name: 'Donald Knuth',
-          authentication: {
-            email: 'taocp@cs.stanford.edu',
-            password: 'grammar'
-          }
+          email: 'taocp@cs.stanford.edu',
+          password: 'grammar12'
         })
         .end(() => {
           done();
@@ -121,12 +111,12 @@ describe('Integration Tests (User Routes)', () => {
     }); 
     it('should return a token on successful login', (done) => {
       request('localhost:3000')
-        .post('/login')
-        .auth('Donald Knuth', 'grammar')
+        .get('/signin')
+        .auth('taocp@cs.stanford.edu', 'grammar12')
         .end((err, res) => {
-          console.log(res.body);
           expect(err).to.eql(null);
           expect(res.status).to.eql(200);
+          expect(res.body).to.have.property('token');
           done();
         });
     });

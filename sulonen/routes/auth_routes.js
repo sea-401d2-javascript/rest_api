@@ -19,7 +19,10 @@ module.exports = (router) => {
     newUser.hashPassword(req.body.password);
     newUser.save((err, data) => {
       if (err) return handleDBError(err, res);
-      res.status(200).json({token: data.generateToken()});
+      res.status(200).json({
+        _id: data._id,
+        token: data.generateToken()
+      });
     });
   });
 
