@@ -1,7 +1,7 @@
 'use strict';
 
 let jwt = require('jsonwebtoken');
-let User = require('./../models/user_model.js');
+let User = require('./../models/user_model');
 
 module.exports = exports = (req, res, next) => {
   var decoded;
@@ -12,7 +12,7 @@ module.exports = exports = (req, res, next) => {
   } catch(e) {
     return res.status(401).json({msg: 'Authentication failed'});
   }
-  User.findOne({_id: decoded.id}, (err, user) => {
+  User.findOne({_id: decoded._id}, (err, user) => {
     if (err) {
       return res.status(401).json({msg: 'User not found'});
     }

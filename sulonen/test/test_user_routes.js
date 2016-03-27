@@ -11,14 +11,42 @@ process.env.MONGO_DB = 'mongodb://localhost/test';
 require('./../server');
 
 describe('Integration Tests (User Routes)', () => {
+
+  var ada_id,
+    alan_id,
+    authToken;
+
+  before((done) => {
+    request('localhost:3000')
+      .post('/signup')
+      .send({
+        name: 'Donald Knuth',
+        email: 'taocp@cs.stanford.edu',
+        password: 'grammar12'
+      })
+      .end((err, res) => {
+        if (err) console.log(err);
+        authToken = res.body.token;
+        done();
+      });
+  });
+
   after(function(done) {
     mongoose.connection.db.dropDatabase(() => {
       done();
     });
   });
 
-  var ada_id, alan_id;
-  describe('test user routes', () => {
+  describe('Test user routes:', () => {
+    it('should deny access without an authorization token', (done) => {
+      request('localhost:3000')
+        .get('/users')
+        .end((err, res) => {
+          expect(err.status).to.eql(401);
+          expect(res.body.msg).to.equal('Authentication failed');
+          done();
+        });
+    });
 
     it('should create a new user', (done) => {
       request('localhost:3000')
@@ -55,6 +83,7 @@ describe('Integration Tests (User Routes)', () => {
     it('should get an array of users', (done) => {
       request('localhost:3000')
         .get('/users')
+        .set('token', authToken)
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(typeof res.body).to.eql('object');
@@ -66,6 +95,7 @@ describe('Integration Tests (User Routes)', () => {
     it('should get a user', (done) => {
       request('localhost:3000')
         .get('/users/' + ada_id)
+        .set('token', authToken)
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(res.body.username).to.equal('Ada Byron');
@@ -77,6 +107,7 @@ describe('Integration Tests (User Routes)', () => {
     it('should update a user', (done) => {
       request('localhost:3000')
         .put('/users/' + ada_id)
+        .set('token', authToken)
         .send({name: 'Ada Lovelace'})
         .end((err, res) => {
           expect(err).to.eql(null);
@@ -85,9 +116,10 @@ describe('Integration Tests (User Routes)', () => {
         });
     });
 
-    it('should be able to delete a user', (done) => {
+    it('should delete a user', (done) => {
       request('localhost:3000')
       .del('/users/' + alan_id)
+      .set('token', authToken)
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(res.body.msg).to.eql('User removed');
@@ -96,7 +128,7 @@ describe('Integration Tests (User Routes)', () => {
     });
   });
 
-  describe('test token generation', () => {
+  describe('Test token generation:', () => {
     before((done) => {
       request('localhost:3000')
         .post('/signup')
@@ -108,7 +140,8 @@ describe('Integration Tests (User Routes)', () => {
         .end(() => {
           done();
         });
-    }); 
+    });
+
     it('should return a token on successful login', (done) => {
       request('localhost:3000')
         .get('/signin')
@@ -121,5 +154,6 @@ describe('Integration Tests (User Routes)', () => {
         });
     });
   });
+
 });
  

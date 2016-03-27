@@ -11,18 +11,50 @@ process.env.MONGO_DB = 'mongodb://localhost/test';
 require('./../server');
 
 describe('Integration Tests (API Routes)', () => {
+  var authToken,
+    bar_id;
+
+  before((done) => {
+    request('localhost:3000')
+      .post('/signup')
+      .send({
+        name: 'Donald Knuth',
+        email: 'taocp@cs.stanford.edu',
+        password: 'grammar12'
+      })
+      .end((err, res) => {
+        if (err) console.log(err);
+        authToken = res.body.token;
+        done();
+      });
+  });
+
   after((done) => {
     mongoose.connection.db.dropDatabase(() => {
       done();
     });
   });
 
-  describe('test bar routes', () => {
+  describe('Test bar routes:', () => {
+    it('should deny access without an authorization token', (done) => {
+      request('localhost:3000')
+        .post('/bars')
+        .send({
+          name: 'The Crocodile',
+          neighborhood: 'Belltown',
+          hours: '6pm - 2:30am'
+        })
+        .end((err, res) => {
+          expect(err.status).to.eql(401);
+          expect(res.body.msg).to.equal('Authentication failed');
+          done();
+        });
+    });
 
-    let bar_id = '';
     it('should create a new bar', (done) => {
       request('localhost:3000')
         .post('/bars')
+        .set('token', authToken)
         .send({
           name: 'Hatties Hat',
           neighborhood: 'Ballard',
@@ -40,6 +72,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should create another bar', (done) => {
       request('localhost:3000')
         .post('/bars')
+        .set('token', authToken)
         .send({
           name: 'Tractor Tavern',
           neighborhood: 'Ballard',
@@ -56,6 +89,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should get an array of bars', (done) => {
       request('localhost:3000')
         .get('/bars')
+        .set('token', authToken)
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(typeof res.body).to.eql('object');
@@ -67,8 +101,10 @@ describe('Integration Tests (API Routes)', () => {
     it('should get a bar', (done) => {
       request('localhost:3000')
         .get('/bars/' + bar_id)
+        .set('token', authToken)
         .end((err, res) => {
           expect(err).to.eql(null);
+          expect(typeof res.body).to.eql('object');
           expect(res.body.name).to.equal('Hatties Hat');
           expect(res.body).to.have.property('_id');
           done();
@@ -78,6 +114,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should update a bar', (done) => {
       request('localhost:3000')
         .put('/bars/' + bar_id)
+        .set('token', authToken)
         .send({neighborhood: 'Ballard Ave'})
         .end((err, res) => {
           expect(err).to.eql(null);
@@ -86,9 +123,10 @@ describe('Integration Tests (API Routes)', () => {
         });
     });
 
-    it('should be able to delete a bar', (done) => {
+    it('should delete a bar', (done) => {
       request('localhost:3000')
       .del('/bars/' + bar_id)
+      .set('token', authToken)
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(res.body.msg).to.eql('bar removed');
@@ -97,12 +135,13 @@ describe('Integration Tests (API Routes)', () => {
     });
   });
 
-  describe('test band routes', () => {
+  describe('Test band routes:', () => {
 
     let band_id = '';
     it('should create a new band', (done) => {
       request('localhost:3000')
         .post('/bands')
+        .set('token', authToken)
         .send({
           name: 'Soundgarden',
           city: 'Seattle',
@@ -122,6 +161,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should create another band', (done) => {
       request('localhost:3000')
         .post('/bands')
+        .set('token', authToken)
         .send({
           name: 'Guilt Machine',
           city: 'The Electric Castle',
@@ -140,6 +180,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should get an array of bands', (done) => {
       request('localhost:3000')
         .get('/bands')
+        .set('token', authToken)
         .end((err, res) => {
           expect(err).to.eql(null);
           expect(typeof res.body).to.eql('object');
@@ -151,6 +192,7 @@ describe('Integration Tests (API Routes)', () => {
     it('should update a band', (done) => {
       request('localhost:3000')
         .put('/bands/' + band_id)
+        .set('token', authToken)
         .send({city: 'Den Hague'})
         .end((err, res) => {
           expect(err).to.eql(null);
@@ -159,9 +201,10 @@ describe('Integration Tests (API Routes)', () => {
         });
     });
 
-    it('should be able to delete a band', (done) => {
+    it('should delete a band', (done) => {
       request('localhost:3000')
       .del('/bands/' + band_id)
+      .set('token', authToken)
       .end((err, res) => {
         expect(err).to.eql(null);
         expect(res.body.msg).to.eql('band removed');
