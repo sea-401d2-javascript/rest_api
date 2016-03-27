@@ -80,6 +80,21 @@ describe('Integration Tests (User Routes)', () => {
         });
     });
 
+    it('should require a unique username', (done) => {
+      request('localhost:3000')
+        .post('/signup')
+        .send({
+          username: 'Alan Turing',
+          email: 'turing@hut8.co.uk',
+          password: 'apple123'
+        })
+        .end((err, res) => {
+          expect(res.status).to.eql(400);
+          expect(res.body.msg).to.eql('That username is already in use');
+          done();
+        });
+    });
+
     it('should get an array of users', (done) => {
       request('localhost:3000')
         .get('/users')

@@ -5,7 +5,10 @@ let bcrypt = require('bcrypt');
 let jwt = require('jsonwebtoken');
 
 let UserSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: [true, 'Username required']
+  },
   authentication: {
     email: String,
     password: String
