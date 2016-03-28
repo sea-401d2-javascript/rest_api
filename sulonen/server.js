@@ -1,24 +1,36 @@
 'use strict';
 
-const express = require('express');
-const mongoose = require('mongoose');
+let express = require('express');
+let mongoose = require('mongoose');
+let morgan = require('morgan');
+const PORT = process.env.PORT || 3000;
+
 const MONGO_DB = process.env.MONGO_DB || 'mongodb://localhost/db';
-
-let bars = require('./routes/bar_routes');
-let bands = require('./routes/band_routes');
-let queries = require('./routes/query_routes');
-
 mongoose.connect(MONGO_DB);
 
-let app = express();
-app.use('/', bars);
-app.use('/', bands);
-app.use('/', queries);
+let authRouter = express.Router();
+require('./routes/auth_routes')(authRouter);
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+let apiRouter = express.Router();
+require('./routes/user_routes')(apiRouter);
+require('./routes/bar_routes')(apiRouter);
+require('./routes/band_routes')(apiRouter);
+require('./routes/query_routes')(apiRouter);
+
+let app = module.exports = exports = express();
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5000');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, token');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
 });
 
-// curl -H "Content-type: application/json" -d '{"name":"Hatties Hat","neighborhood":"Ballard","hours":"3pm - 3am"}' localhost:3000/bars
-// curl -H "Content-type: application/json" -d '{"name":"Tractor Tavern","neighborhood":"Ballard","hours":"4pm - 3am"}' localhost:3000/bars
-// curl -H "Content-type: application/json" -d '{"name":"Pink Door","neighborhood":"Pike Place Market","hours":"4pm - 3am"}' localhost:3000/bars
+app.use(morgan('dev'));
+app.use('/', authRouter);
+app.use('/', apiRouter);
+
+app.listen(PORT, () => {
+  console.log('Server listening on port ' + PORT);
+});
+

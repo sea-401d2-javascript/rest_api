@@ -1,49 +1,41 @@
 'use strict';
 
 let parser = require('body-parser');
-let Band = require('./../models/band_model');
+let User = require('./../models/user_model');
 let handleDBError = require('./../lib/handle_db_error');
 let jwtAuth = require('./../lib/jwt_auth');
 
 module.exports = (router) => {
   router.use(parser.json());
 
-  router.route('/bands')
+  router.route('/users')
     .get(jwtAuth, (req, res) => {
-      Band.find({}, (err, Bands) => {
+      User.find({}, (err, users) => {
         if (err) return console.log(err);
-        res.json({data: Bands});
-      });
-    })
-
-    .post(jwtAuth, (req, res) => {
-      var newBand = new Band(req.body);
-      newBand.save((err, Band) => {
-        if (err) return console.log(err);
-        res.json(Band);
+        res.json({data: users});
       });
     });
 
-  router.route('/bands/:id')
+  router.route('/users/:user')
     .get(jwtAuth, (req, res) => {
-      Band.findById(req.params.id, (err, Band) => {
+      User.findById(req.params.user, (err, user) => {
         if (err) return console.log(err);
-        res.json(Band);
+        res.json(user);
       });
     })
 
     .put(jwtAuth, (req, res) => {
-      Band.findByIdAndUpdate(req.params.id, req.body, (err) => {
+      User.findByIdAndUpdate(req.params.user, req.body, (err) => {
         if (err) return console.log(err);
         res.json({msg: 'success'});
       });
     })
 
     .delete(jwtAuth, (req, res) => {
-      Band.findById(req.params.id, (err, Band) => {
-        Band.remove((err) => {
+      User.findById(req.params.user, (err, user) => {
+        user.remove((err) => {
           if (err) return console.log(err);
-          res.json({msg: 'band removed'});
+          res.json({msg: 'User removed'});
         });
       });
     });
