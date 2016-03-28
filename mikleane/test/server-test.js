@@ -1,20 +1,21 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var chai = require('chai');
-var chaiHttp = require('chai-http');
+let mongoose = require('mongoose');
+let chai = require('chai');
+let chaiHttp = require('chai-http');
 chai.use(chaiHttp);
-var expect = chai.expect;
-// var request = chai.request;
+let expect = chai.expect;
+let request = chai.request;
 
-var Beers = require(__dirname + '/../models/beer_model.js');
-var Drinks = require(__dirname + '/../models/drink_model.js');
+let Beers = require(__dirname + '/../models/beer_model.js');
+let Drinks = require(__dirname + '/../models/drink_model.js');
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/testdb';
 
 require(__dirname + '/../server');
 
-describe('beers REST api', function() {
+describe('test Beer REST with authentication', function () {
+  var token;
 
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {
@@ -22,9 +23,33 @@ describe('beers REST api', function() {
     });
   });
 
+  before(function(done) {
+    request('localhost:3000')
+    .post('/signup')
+    .auth('user', 'password')
+    .end(function(err, res) {
+      token = res.body.token;
+      expect(err).to.eql(null);
+      expect(res).to.have.status(200);
+      expect(res).to.have.property('headers');
+      expect(res.body).to.have.property('token');
+      done();
+    });
+  });
+  it('should get all beers in db', function(done) {
+    request('localhost:3000')
+    .get('/beers')
+    .set('token', token)
+    .end(function(err, res) {
+      expect(err).to.eql(null);
+      expect(typeof res.body).to.eql('object');
+      done();
+    });
+  });
   it('should be able to create a new beer', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
       .post('/beers')
+      .set('token', token)
       .send({name: 'great beer'})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -32,16 +57,6 @@ describe('beers REST api', function() {
         expect(res.body).to.have.property('name');
         done();
       });
-  });
-
-  it('should get all beers in db', function(done) {
-    chai.request('localhost:3000')
-    .get('/beers')
-    .end(function(err, res) {
-      expect(err).to.eql(null);
-      expect(typeof res.body).to.eql('object');
-      done();
-    });
   });
 
   describe('needs a beer to work with', function() {
@@ -62,8 +77,9 @@ describe('beers REST api', function() {
 
     it('should update a beer record', function(done) {
       var id = this.testBeer._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .put('/beers/' + id)
+      .set('token', token)
       .send('{"name": "new beer name"}')
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -74,8 +90,9 @@ describe('beers REST api', function() {
 
     it('should be able to delete a beer', function(done) {
       var id = this.testBeer._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
         .delete('/beers/' + id)
+        .set('token', token)
         .end(function(err, res) {
           expect(err).to.eql(null);
           expect(res.body).to.eql({message: 'beer removed'});
@@ -84,18 +101,34 @@ describe('beers REST api', function() {
     });
   });
 });
-describe('Drinks REST api', function() {
+
+describe('test Drink REST api with authentication', function () {
+  var token;
 
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {
-      console.log('server disconnected');
+      done();
+    });
+  });
+
+  before(function(done) {
+    request('localhost:3000')
+    .post('/signup')
+    .auth('user', 'password')
+    .end(function(err, res) {
+      token = res.body.token;
+      expect(err).to.eql(null);
+      expect(res).to.have.status(200);
+      expect(res).to.have.property('headers');
+      expect(res.body).to.have.property('token');
       done();
     });
   });
 
   it('should be able to create a new drink', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
       .post('/drinks')
+      .set('token', token)
       .send({name: 'Lemon Drop'})
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -106,8 +139,9 @@ describe('Drinks REST api', function() {
   });
 
   it('should get all drinks in db', function(done) {
-    chai.request('localhost:3000')
+    request('localhost:3000')
     .get('/drinks')
+    .set('token', token)
     .end(function(err, res) {
       expect(err).to.eql(null);
       expect(typeof res.body).to.eql('object');
@@ -132,8 +166,9 @@ describe('Drinks REST api', function() {
     });
 
     it('should get all drinks made with a user chosen alcohol', function(done) {
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .get('/search/?alcohol="gin"')
+      .set('token', token)
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(typeof res.body).to.eql('object');
@@ -143,8 +178,9 @@ describe('Drinks REST api', function() {
 
     it('should update a drink record', function(done) {
       var id = this.testDrink._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
       .put('/drinks/' + id)
+      .set('token', token)
       .send('{"name": "new drink name"}')
       .end(function(err, res) {
         expect(err).to.eql(null);
@@ -155,8 +191,9 @@ describe('Drinks REST api', function() {
 
     it('should be able to delete a drink', function(done) {
       var id = this.testDrink._id;
-      chai.request('localhost:3000')
+      request('localhost:3000')
         .delete('/drinks/' + id)
+        .set('token', token)
         .end(function(err, res) {
           expect(err).to.eql(null);
           expect(res.body).to.eql({message: 'drink removed'});

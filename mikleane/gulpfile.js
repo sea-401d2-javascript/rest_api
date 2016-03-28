@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var mocha = require('gulp-mocha');
 
-var paths = ['*.js', 'test/*.js', 'routes/*.js', 'lib/*.js'];
+var paths = ['*.js', 'test/*.js', 'routes/*.js', 'lib/*.js', 'models/*.js'];
 
 gulp.task('eslint', function() {
   return gulp.src(paths)
@@ -19,7 +19,7 @@ gulp.task('mocha', function(){
 
 gulp.task('watch', function() {
   gulp.watch('*.js', ['eslint']);
-  gulp.watch('routes/*.js', ['eslint']);
+  gulp.watch('models/*.js', ['eslint']);
   gulp.watch('lib/*.js', ['eslint']);
   gulp.watch('test/*.js', ['eslint','mocha']);
 });
