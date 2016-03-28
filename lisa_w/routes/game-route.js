@@ -1,11 +1,14 @@
 'use strict';
-var Game = require('../models/Game');
-var bodyParser = require('body-parser');
+const Game = require('../models/Game');
+const express = require('express');
+const jsonParser = require('body-parser').json();
+const dbErrorHandler = require(__dirname + '/../lib/db-error-handler');
+const jwtAuth = require(__dirname + '/../lib/jwt-auth');
 
-module.exports = (router) => {
-  router.use(bodyParser.json());
+var gameRouter = module.exports = exports = express.Router();
 
-  router.route('/games')
+
+gameRouter.route('/games')
        .post((req, res)=>{
          console.log('post /games was hit');
          var newGame = new Game(req.body);
@@ -22,7 +25,7 @@ module.exports = (router) => {
          });
        });
 
-  router.route('/games/:id')
+gameRouter.route('/games/:id')
        .get((req, res)=>{
          console.log(('GET /games/:id was hit'));
          Game.findById(req.params.id, (err, game)=>{
@@ -47,7 +50,7 @@ module.exports = (router) => {
                message: 'sucessfully deleted game: ' + game});
            });
          });
-  router.route('/game-genres')
+gameRouter.route('/game-genres')
            .get((req, res)=>{
              var genreArray = [];
              Game.find({}, (err, games)=>{
@@ -58,5 +61,3 @@ module.exports = (router) => {
                res.json({genreArray});
              });
            });
-
-};
