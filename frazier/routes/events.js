@@ -7,6 +7,9 @@ var Character = require(__dirname + '/../models/characters-model.js');
 
 var router = express.Router();
 
+
+
+
 router.get('/', (request, response) => {
   console.log('GET request to /events made');
   Event.find({}).populate('charsPresent')
@@ -18,6 +21,9 @@ router.get('/', (request, response) => {
     }
   });
 });
+
+
+
 
 router.post('/', (request, response) => {
   console.log('POST to /events made');
@@ -46,6 +52,10 @@ router.post('/', (request, response) => {
   }
 });
 
+
+
+
+
 router.get('/:id', (request, response) => {
   console.log('GET request to /events/:id made');
   // Event.findOne({_id: request.params.id}, (err, thatEvent) => {
@@ -59,6 +69,10 @@ router.get('/:id', (request, response) => {
     }
   });  
 });
+
+
+
+
 
 router.put('/:id', (request, response) => {
   console.log('PUT request to /event/:id made');
@@ -81,6 +95,9 @@ router.put('/:id', (request, response) => {
   });
 });
 
+
+
+
 router.delete('/:id', (request, response) => {
   console.log('DELETE request to /event/:id made');
   Event.findOneAndRemove({_id: request.params.id}, (err, DBEvent, result) => {
@@ -93,5 +110,10 @@ router.delete('/:id', (request, response) => {
     }
   });
 });
+
+
+
+
+
 
 module.exports = router;
