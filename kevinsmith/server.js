@@ -28,13 +28,18 @@ app.get('/users', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
   User.findById(req.params.id, (err, user) => {
-    res.json(user);
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(user);      
+    }
   });
 });
 
 app.put('/users/:id', (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
     if (err) return res.send(err);
+    console.log('Updated: ', user  );
     res.json(user);
   });
 });
@@ -43,18 +48,17 @@ app.delete('/users/:id', (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) return res.send(err);
     user.remove((err, user) => {
-      res.json({message: 'user removed'});
+      res.json({'message': 'user removed'});
     });
   });
 });
-
 
 // *** Classes ***
 
 // Displays all overloaded courses
 app.get('/courses/overload', (req, res) => {
   Course.find({$where: 'this.enrollment > this.maxEnroll'}, (err, course) => {
-     res.json(course);
+    res.json(course);
   });
 });
 
@@ -99,13 +103,6 @@ app.delete('/courses/:id', (req, res) => {
     });
   });
 });
-
-app.get('/courses/overload', (req, res) => {
-  Course.find({}, (err, course) => {
-    res.json(course);
-  });
-});
-
 
 app.listen(3000, () =>{
   console.log('Server started on 3000');
