@@ -6,27 +6,31 @@ let app = express();
 let mongoose = require('mongoose');
 let User = require('./models/user_model');
 let Course = require('./models/class_model');
+let auth = require('./lib/authentication');
 
 let DB_PORT = process.env.MONGOLAB_URI || 'mongodb://localhost/db';
 mongoose.connect(DB_PORT);
 
+// The extended config object key now needs
+// to be explicitly passed, since it now has no default value.
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 // *** Users ***
-app.post('/users', (req, res) => {
+app.post('/users', auth, (req, res) => {
   var newUser = new User(req.body);
   newUser.save((err, user) => {
     res.json(user);
   });
 });
 
-app.get('/users', (req, res) => {
+app.get('/users', auth, (req, res) => {
   User.find({}, (err, users) => {
     res.json({data: users});
   });
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', auth, (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) {
       res.json(err);
@@ -36,7 +40,7 @@ app.get('/users/:id', (req, res) => {
   });
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', auth, (req, res) => {
   User.findByIdAndUpdate(req.params.id, req.body, (err, user) => {
     if (err) return res.send(err);
     console.log('Updated: ', user  );
@@ -44,7 +48,7 @@ app.put('/users/:id', (req, res) => {
   });
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', auth, (req, res) => {
   User.findById(req.params.id, (err, user) => {
     if (err) return res.send(err);
     user.remove((err, user) => {
@@ -103,6 +107,28 @@ app.delete('/courses/:id', (req, res) => {
     });
   });
 });
+
+app.post('/login', (req, res) => {
+
+    let authorizationArray = req.headers.authorization.split(' ');
+    let base64ed = authorizationArray[1];
+    let authArray = new Buffer(base64ed, 'base64').toString().split(':');
+    let name = authArray[0];
+    let password = authArray[1];
+    // parse based on basic or whatever method
+    User.find({name: name}, (err, user) => {
+      if (user.length == 0) {
+        return res.json({status: 'failure', message: 'Invalid username!'});
+      }
+      let valid = user[0].compareHash(password);
+      if (!valid) {
+        return res.json({status: 'failure', message: 'Invalid password!'});
+      }
+      // generate and return the token
+      var myToken = user[0].generateToken();
+      res.json({message: 'Welcome, ' + name, token: myToken});
+    }) ;
+  });
 
 app.listen(3000, () =>{
   console.log('Server started on 3000');

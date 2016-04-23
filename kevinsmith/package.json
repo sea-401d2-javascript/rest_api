@@ -4,7 +4,8 @@
   "description": "##To Submit this Assignment   * fork this repository   * write all of your code in a folder containing your name   * push to your repository   * submit a pull request to this repository   * submit a link to your PR in canvas",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -25,8 +26,11 @@
     "gulp-mocha": "^2.2.0"
   },
   "dependencies": {
+    "bcrypt": "^0.8.6",
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
+    "jsonwebtoken": "^5.7.0",
     "mongoose": "^4.4.7"
-  }
+  },
+  "keywords": []
 }
