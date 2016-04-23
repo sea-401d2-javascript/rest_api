@@ -5,7 +5,11 @@ let bcrypt = require('bcrypt');
 let jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
-  name: String,
+	name: {
+    type: String,
+    required: true,
+    unique: true
+  },
   password: {type: String /*, minlength: [8, 'Passwords must be at least 8 characters.']*/}
 });
 

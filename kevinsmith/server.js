@@ -17,10 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 // *** Users ***
-app.post('/users', auth, (req, res) => {
+app.post('/users', (req, res) => {
   var newUser = new User(req.body);
   newUser.save((err, user) => {
-    res.json(user);
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(user);      
+    }
   });
 });
 
@@ -62,33 +66,53 @@ app.delete('/users/:id', auth, (req, res) => {
 // Displays all overloaded courses
 app.get('/courses/overload', (req, res) => {
   Course.find({$where: 'this.enrollment > this.maxEnroll'}, (err, course) => {
-    res.json(course);
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(course);
+	}
   });
 });
 
 app.post('/courses', (req, res) => {
   var newCourse = new Course(req.body);
   newCourse.save((err, course) => {
-    res.json(course);
+    if (err) {
+      res.json(err);
+    } else {
+    	res.json(course);
+	}
   });
 });
 
 app.post('/courses', (req, res) => {
   var newCourse = new Course(req.body);
   newCourse.save((err, course) => {
-    res.json(course);
+    if (err) {
+      res.json(err);
+    } else {
+    	res.json(course);
+	}
   });
 });
 
 app.get('/courses', (req, res) => {
   Course.find({}, (err, courses) => {
-    res.json({data: courses});
+    if (err) {
+      res.json(err);
+    } else {
+    	res.json({data: courses});
+	}
   });
 });
 
 app.get('/courses/:id', (req, res) => {
   Course.findById(req.params.id, (err, course) => {
-    res.json(course);
+    if (err) {
+      res.json(err);
+    } else {
+    	res.json(course);
+	}
   });
 });
 
