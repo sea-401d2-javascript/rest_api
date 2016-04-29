@@ -21,7 +21,7 @@ app.post('/users', (req, res) => {
   var newUser = new User(req.body);
   newUser.save((err, user) => {
     if (err) {
-      res.json(err);
+      res.json({error:err.errmsg});
     } else {
       res.json(user);      
     }
